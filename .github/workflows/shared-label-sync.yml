@@ -2,6 +2,10 @@ name:  Antibytes CI - Label Sync
 
 on:
   workflow_call:
+    inputs:
+      labels-path:
+        required: true
+        type: string
     secrets:
       github-token:
         required: true
@@ -14,6 +18,8 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
       - name: Sync labels
-        uses: b4b4r07/github-labeler@master
+        uses: micnncim/action-label-syncer@v1
         env:
           GITHUB_TOKEN: ${{ secrets.github-token }}
+        with:
+          manifest: ${{ inputs.labels-path }}
