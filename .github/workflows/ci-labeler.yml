@@ -1,0 +1,17 @@
+name: Antibytes CI - Label configuration
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - '.github/labels.yml'
+  workflow_dispatch:
+
+jobs:
+  configure-labels:
+    uses: ./.github/workflows/shared-labeler.yml
+    with:
+      config-path: .github/labeler.yml
+    secrets:
+      github-token: ${{ secrets.GITHUB_TOKEN }}

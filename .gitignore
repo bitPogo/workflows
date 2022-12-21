@@ -1,0 +1,34 @@
+# Gradle
+.gradle/
+build/
+local.properties
+
+# IDEA/Android Studio ignores
+*iml
+.idea/*
+
+# IDEA/Android Studio includes
+!.idea/fileTemplates/
+!.idea/inspectionProfiles/
+!.idea/scopes/
+!.idea/codeStyles/
+!.idea/encoding.xml
+!.idea/copyright/
+
+# Others
+captures/
+
+.asciidoctor/
+
+.DS_Store
+
+# generated
+antibytes-grammar-tools/src/integration/resources/bisonExec
+**/src-gen/**/*.kt
+
+# Editors
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
