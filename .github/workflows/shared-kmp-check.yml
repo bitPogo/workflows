@@ -1,0 +1,67 @@
+name: Run Checks
+
+on:
+  workflow_call:
+    inputs:
+      platforms:
+        required: true
+        type: string
+
+
+concurrency:
+  group: validation-${{ github.workflow }}@${{ github.event.pull_request.head.label || github.head_ref || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    strategy:
+      matrix:
+        config: [
+          { target: android, os: ubuntu-latest, tasks: testDebugUnitTest testReleaseUnitTest, continueOnError: false },
+          { target: apple, os: macos-latest, tasks: iosX64Test iosSimulatorArm64Test, continueOnError: false }, # macosX64Test macosArm64Test tvosX64Test tvosSimulatorArm64Test watchosX64Test watchosSimulatorArm64Test, continueOnError: false },
+          # { target: windows, os: windows-latest, tasks: windowsTest, continueOnError: true }, # https://github.com/square/okio/issues/951
+          { target: linux, os: ubuntu-latest, tasks: linuxX64Test, continueOnError: false },
+          { target: js, os: ubuntu-latest, tasks: jsTest, continueOnError: false },
+          { target: jvm, os: ubuntu-latest, tasks: jvmTest, continueOnError: false },
+        ]
+    runs-on: ${{ matrix.config.os }}
+
+    name: Check ${{ matrix.config.target }}
+    steps:
+      - uses: actions/checkout@v3
+        if: contains(fromJson(inputs.platforms), matrix.config.target)
+
+      - uses: actions/setup-java@v3
+        if: contains(fromJson(inputs.platforms), matrix.config.target)
+        with:
+          distribution: 'temurin' # See 'Supported distributions' for available options
+          java-version: '11'
+          cache: gradle
+
+      - name: Echo Active
+        run: echo ${{ contains(fromJson(inputs.platforms), matrix.config.target) }}
+
+      - name: Echo Platform
+        run: echo ${{ matrix.config.target }}
+
+      - name: Echo Input
+        run: echo ${{ fromJson(inputs.platforms) }}
+
+      - name: Setup gradle
+        if: contains(fromJson(inputs.platforms), matrix.config.target)
+        uses: gradle/gradle-build-action@v2
+
+      - name: Cleanup
+        if: contains(fromJson(inputs.platforms), matrix.config.target)
+        run: ./gradlew clean
+
+      - name: Test ${{ matrix.config.target }} targets
+        if: contains(fromJson(inputs.platforms), matrix.config.target)
+        continue-on-error: ${{ matrix.config.continueOnError }}
+        run: ./gradlew ${{ matrix.config.tasks }}
+
+      - name: Publish Test Report
+        if: failure() && contains(fromJson(inputs.platforms), matrix.config.target)
+        uses: mikepenz/action-junit-report@v3
+        with:
+          report_paths: '**/build/test-results/**/TEST-*.xml'
