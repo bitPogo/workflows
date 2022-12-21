@@ -6,5 +6,7 @@ on:
 jobs:
   sync-labels:
     uses: ./.github/workflows/shared-label-sync.yml
+    with:
+      labels-path: .github/labels.yml
     secrets:
       github-token: ${{ secrets.GITHUB_TOKEN }}
