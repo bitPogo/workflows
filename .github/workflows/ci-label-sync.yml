@@ -1,0 +1,10 @@
+name: Antibytes CI - Label Synchronisation
+
+on:
+  workflow_dispatch:
+
+jobs:
+  sync-labels:
+    uses: ./.github/workflows/shared-label-sync.yml
+    secrets:
+      github-token: ${{ secrets.GITHUB_TOKEN }}
