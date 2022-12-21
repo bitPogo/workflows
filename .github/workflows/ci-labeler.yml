@@ -2,8 +2,10 @@ name: Antibytes CI - Label configuration
 
 on:
   pull_request:
+    types: [ opened, synchronize, edited, reopened ]
     branches:
       - main
+      - release/*
     paths:
       - '.github/labels.yml'
   workflow_dispatch:
@@ -12,6 +14,6 @@ jobs:
   configure-labels:
     uses: ./.github/workflows/shared-labeler.yml
     with:
-      config-path: .github/labeler.yml
+      labels-path: ./.github/labeler.yml
     secrets:
       github-token: ${{ secrets.GITHUB_TOKEN }}

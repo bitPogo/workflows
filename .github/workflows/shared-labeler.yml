@@ -6,17 +6,18 @@ on:
       labels-path:
         required: true
         type: string
+    secrets:
       github-token:
         required: true
-        type: string
 
 jobs:
   configure-labels:
+    permissions:
+      contents: read
+      pull-requests: write
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: micnncim/action-label-syncer@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.github-token }}
+      - uses: actions/labeler@v4
         with:
-          manifest:  ${{ inputs.labels-path }}
+          repo-token: "${{ secrets.github-token }}"
+          configuration-path: "${{ inputs.labels-path }}"
