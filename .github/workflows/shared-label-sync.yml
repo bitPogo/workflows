@@ -1,0 +1,19 @@
+name:  Antibytes CI - Label Sync
+
+on:
+  workflow_call:
+    secrets:
+      github-token:
+        required: true
+
+jobs:
+  sync:
+    name: Run
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@4
+      - name: Sync labels
+        uses: b4b4r07/github-labeler@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.github-token }}

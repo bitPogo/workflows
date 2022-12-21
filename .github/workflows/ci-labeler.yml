@@ -1,17 +1,17 @@
-name: Antibytes CI - Label configuration
+name: Antibytes CI - Label Pull Request Labels
 
 on:
   pull_request:
     types: [ opened, synchronize, edited, reopened ]
     branches:
       - main
-      - release/*
+      - feature/**
     paths:
       - '.github/labels.yml'
   workflow_dispatch:
 
 jobs:
-  configure-labels:
+  add-pr-labels:
     uses: ./.github/workflows/shared-labeler.yml
     with:
       labels-path: ./.github/labeler.yml
