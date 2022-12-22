@@ -1,0 +1,39 @@
+name: Antibytes CI - Pull-Request Validation
+
+on:
+  workflow_call:
+    secrets:
+      upload-username:
+        required: true
+      upload-token:
+        required: true
+
+jobs:
+  pull-request-validation:
+    runs-on: macos-latest
+
+    env:
+      PACKAGE_REGISTRY_UPLOAD_USERNAME: ${{ secrets.upload-username }}
+      PACKAGE_REGISTRY_UPLOAD_TOKEN: ${{ secrets.upload-token }}
+
+    steps:
+      - name: Display runner context
+        run: hostname -s
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+          ref: ${{ github.head_ref }}
+      - uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin' # See 'Supported distributions' for available options
+          java-version: '11'
+          cache: gradle
+
+      - name: Setup gradle
+        uses: gradle/gradle-build-action@v2
+      - name: Lint
+        run: ./gradlew spotlessCheck
+      - name: Build
+        run: ./gradlew build
+      - name: Publish to Development Repository
+        run: ./gradlew publishDevelopment --no-parallel

@@ -38,15 +38,6 @@ jobs:
           java-version: '11'
           cache: gradle
 
-      - name: Echo Active
-        run: echo ${{ contains(fromJson(inputs.platforms), matrix.config.target) }}
-
-      - name: Echo Platform
-        run: echo ${{ matrix.config.target }}
-
-      - name: Echo Input
-        run: echo ${{ fromJson(inputs.platforms) }}
-
       - name: Setup gradle
         if: contains(fromJson(inputs.platforms), matrix.config.target)
         uses: gradle/gradle-build-action@v2
