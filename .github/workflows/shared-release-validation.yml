@@ -1,4 +1,4 @@
-name: Antibytes CI - Rolling Release
+name: Antibytes CI - Release
 
 on:
   workflow_call:
@@ -7,21 +7,35 @@ on:
         required: true
       upload-token:
         required: true
+      maven-key:
+        required: true
+      maven-pass:
+        required: true
+      ossr-username:
+        required: true
+      ossr-token:
+          required: true
 
 jobs:
-  rolling-release:
+  publish-release:
     runs-on: macos-latest
 
     env:
       PACKAGE_REGISTRY_UPLOAD_USERNAME: ${{ secrets.upload-username }}
       PACKAGE_REGISTRY_UPLOAD_TOKEN: ${{ secrets.upload-token }}
+      MAVEN_PASSPHRASE: ${{ secrets.maven-pass }}
+      MAVEN_KEY: ${{ secrets.maven-key }}
+      OSSR_USERNAME: ${{ secrets.ossr-username }}
+      OSSR_PASSWORD: ${{ secrets.ossr-token }}
 
     steps:
       - name: Display runner context
         run: hostname -s
+
       - uses: actions/checkout@v2
         with:
           fetch-depth: 0
+
       - uses: actions/setup-java@v3
         with:
           distribution: 'temurin' # See 'Supported distributions' for available options
@@ -34,5 +48,8 @@ jobs:
       - name: Build
         run: ./gradlew build
 
-      - name: Publish to Rolling Release Repository
-        run: ./gradlew publishRollingRelease --no-parallel
+      - name: Publish to Maven Central
+        run: ./gradlew publishMavenCentral --stacktrace --no-parallel
+
+      - name: Publish to Release Repository
+        run: ./gradlew publishRelease --stacktrace --no-parallel

@@ -4,7 +4,7 @@ on:
   workflow_call:
     secrets:
       github-token:
-        required: false
+        required: true
 
 jobs:
   release-docs:
