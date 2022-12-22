@@ -9,7 +9,7 @@ on:
         required: true
 
 jobs:
-  publish-rolling-release:
+  rolling-release:
     runs-on: macos-latest
 
     env:
