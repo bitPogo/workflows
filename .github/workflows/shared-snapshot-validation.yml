@@ -2,10 +2,6 @@ name: Antibytes CI - Snapshot
 
 on:
   workflow_call:
-    inputs:
-      publish-docs:
-        required: true
-        type: boolean
     secrets:
       upload-username:
         required: true
@@ -39,17 +35,6 @@ jobs:
 
       - name: Build
         run: ./gradlew build
-
-      - name: Prepare Python
-        if: inputs.publish-docs
-        run: python3 -m pip install virtualenv --user
-
-      - name: Publish documentation
-        if: inputs.publish-docs
-        env:
-          GRGIT_USER: ${{ github.actor }}
-          GRGIT_PASS: ${{ secrets.github-token }}
-        run: ./gradlew --no-daemon --stacktrace mkdocsPublish
 
       - name: Publish to Snapshot Repository
         run: ./gradlew publishSnapshot --no-parallel
