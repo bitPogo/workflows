@@ -7,6 +7,12 @@ on:
         required: true
       upload-token:
         required: true
+      maven-key:
+        required: false
+        default: null
+      maven-pass:
+        required: false
+        default: null
 
 jobs:
   pull-request-validation:
@@ -30,6 +36,13 @@ jobs:
 
       - name: Setup gradle
         uses: gradle/gradle-build-action@v2
+
+      - name: Set conditional enviroment
+          run: |
+            echo "MAVEN_PASSPHRASE=${{ secrets.maven-pass }}" >> $GITHUB_ENV
+            echo "MAVEN_KEY=${{ secrets.maven-key}}" >> $GITHUB_ENV
+          if: maven-pass != null
+
       - name: Lint
         run: ./gradlew spotlessCheck
       - name: Build

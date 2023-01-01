@@ -9,6 +9,12 @@ on:
         required: true
       github-token:
         required: false
+      maven-key:
+        required: false
+        default: null
+      maven-pass:
+        required: false
+        default: null
 
 jobs:
   snapshot:
@@ -31,6 +37,12 @@ jobs:
 
       - name: Setup gradle
         uses: gradle/gradle-build-action@v2
+
+      - name: Set conditional enviroment
+        run: |
+          echo "MAVEN_PASSPHRASE=${{ secrets.maven-pass }}" >> $GITHUB_ENV
+          echo "MAVEN_KEY=${{ secrets.maven-key}}" >> $GITHUB_ENV
+        if: maven-pass != null
 
       - name: Build
         run: ./gradlew build
