@@ -38,10 +38,10 @@ jobs:
         uses: gradle/gradle-build-action@v2
 
       - name: Set conditional enviroment
-          run: |
-            echo "MAVEN_PASSPHRASE=${{ secrets.maven-pass }}" >> $GITHUB_ENV
-            echo "MAVEN_KEY=${{ secrets.maven-key}}" >> $GITHUB_ENV
-          if: maven-pass != null
+        run: |
+          echo "MAVEN_PASSPHRASE=${{ secrets.maven-pass }}" >> $GITHUB_ENV
+          echo "MAVEN_KEY=${{ secrets.maven-key}}" >> $GITHUB_ENV
+        if: maven-pass != null
 
       - name: Lint
         run: ./gradlew spotlessCheck
