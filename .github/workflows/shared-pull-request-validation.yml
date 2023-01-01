@@ -9,10 +9,10 @@ on:
         required: true
       maven-key:
         required: false
-        default: null
+        default: ''
       maven-pass:
         required: false
-        default: null
+        default: ''
 
 jobs:
   pull-request-validation:
@@ -41,7 +41,7 @@ jobs:
         run: |
           echo "MAVEN_PASSPHRASE=${{ secrets.maven-pass }}" >> $GITHUB_ENV
           echo "MAVEN_KEY=${{ secrets.maven-key}}" >> $GITHUB_ENV
-        if: maven-pass != null
+        if: maven-pass != ''
 
       - name: Lint
         run: ./gradlew spotlessCheck
