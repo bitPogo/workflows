@@ -3,6 +3,10 @@ name: Run Checks
 on:
   workflow_call:
     inputs:
+      cleanup:
+        required: false
+        type: boolean
+        default: true
       platforms:
         required: true
         type: string
@@ -42,7 +46,7 @@ jobs:
         uses: gradle/gradle-build-action@v2
 
       - name: Cleanup
-        if: contains(fromJson(inputs.platforms), matrix.config.target)
+        if: contains(fromJson(inputs.platforms), matrix.config.target) && ${{ inputs.cleanup == true }}
         run: ./gradlew clean
 
       - name: Test ${{ matrix.config.target }} targets

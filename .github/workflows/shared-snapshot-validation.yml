@@ -21,8 +21,8 @@ jobs:
     env:
       PACKAGE_REGISTRY_UPLOAD_USERNAME: ${{ secrets.upload-username }}
       PACKAGE_REGISTRY_UPLOAD_TOKEN: ${{ secrets.upload-token }}
-      MAVEN_PASSPHRASE: ${{ secrets.MAVEN_GPG_PASS }}
-      MAVEN_KEY: ${{ secrets.MAVEN_GPG_KEY }}
+      MAVEN_KEY: ${{ secrets.maven-key }}
+      MAVEN_PASSPHRASE: ${{ secrets.maven-pass }}
 
     steps:
       - name: Display runner context
