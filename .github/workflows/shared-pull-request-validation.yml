@@ -21,6 +21,7 @@ jobs:
     env:
       PACKAGE_REGISTRY_UPLOAD_USERNAME: ${{ secrets.upload-username }}
       PACKAGE_REGISTRY_UPLOAD_TOKEN: ${{ secrets.upload-token }}
+      USE_SIGNING: ${{ secrets.maven-key != '' }}
 
     steps:
       - name: Display runner context
@@ -41,7 +42,7 @@ jobs:
         run: |
           echo "MAVEN_PASSPHRASE=${{ secrets.maven-pass }}" >> $GITHUB_ENV
           echo "MAVEN_KEY=${{ secrets.maven-key}}" >> $GITHUB_ENV
-        if: maven-pass != ''
+        if: ${{ USE_SIGNING }}
 
       - name: Lint
         run: ./gradlew spotlessCheck
