@@ -33,4 +33,4 @@ jobs:
         env:
           GRGIT_USER: ${{ github.actor }}
           GRGIT_PASS: ${{ secrets.GITHUB_TOKEN }}
-        run: ./gradlew --no-daemon --stacktrace mkdocsPublish
+        run: ./gradlew --no-daemon --stacktrace mkdocsPublish -Prelease
