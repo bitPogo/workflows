@@ -38,7 +38,7 @@ jobs:
         uses: gradle/gradle-build-action@v2
 
       - name: Set conditional enviroment
-        if: ${{ env.USE_SIGNING == true }}
+        if: ${{ env.USE_SIGNING == 'true' }}
         run: |
           echo "MAVEN_PASSPHRASE=${{ secrets.maven-pass }}" >> $GITHUB_ENV
           echo "MAVEN_KEY=${{ secrets.maven-key }}" >> $GITHUB_ENV
