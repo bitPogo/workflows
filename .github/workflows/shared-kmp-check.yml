@@ -36,7 +36,6 @@ jobs:
         with:
           distribution: 'temurin' # See 'Supported distributions' for available options
           java-version: '11'
-          cache: gradle
 
       - name: Setup gradle
         if: contains(fromJson(inputs.platforms), matrix.config.target)
