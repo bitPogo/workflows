@@ -26,7 +26,6 @@ jobs:
         uses: gradle/gradle-build-action@v2
 
       - name: Prepare Python
-        if: inputs.publish-docs
         run: python3 -m pip install virtualenv --user
 
       - name: Publish documentation
