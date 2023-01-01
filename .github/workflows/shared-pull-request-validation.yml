@@ -19,7 +19,8 @@ jobs:
     env:
       PACKAGE_REGISTRY_UPLOAD_USERNAME: ${{ secrets.upload-username }}
       PACKAGE_REGISTRY_UPLOAD_TOKEN: ${{ secrets.upload-token }}
-      USE_SIGNING: ${{ secrets.maven-key != '' }}
+      MAVEN_PASSPHRASE: ${{ secrets.MAVEN_GPG_PASS }}
+      MAVEN_KEY: ${{ secrets.MAVEN_GPG_KEY }}
 
     steps:
       - name: Display runner context
@@ -42,13 +43,5 @@ jobs:
       - name: Build
         run: ./gradlew build
 
-      - name: Publish to Development Repository signed
-        if: ${{ env.USE_SIGNING == 'true' }}
-        env:
-          MAVEN_PASSPHRASE: ${{ secrets.MAVEN_GPG_PASS }}
-          MAVEN_KEY: ${{ secrets.MAVEN_GPG_KEY }}
-        run: ./gradlew publishDevelopment --no-parallel
-
       - name: Publish to Development Repository
-        if: ${{ env.USE_SIGNING == 'false' }}
         run: ./gradlew publishDevelopment --no-parallel

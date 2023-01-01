@@ -21,7 +21,8 @@ jobs:
     env:
       PACKAGE_REGISTRY_UPLOAD_USERNAME: ${{ secrets.upload-username }}
       PACKAGE_REGISTRY_UPLOAD_TOKEN: ${{ secrets.upload-token }}
-      USE_SIGNING: ${{ secrets.maven-key != '' }}
+      MAVEN_PASSPHRASE: ${{ secrets.MAVEN_GPG_PASS }}
+      MAVEN_KEY: ${{ secrets.MAVEN_GPG_KEY }}
 
     steps:
       - name: Display runner context
@@ -40,13 +41,5 @@ jobs:
       - name: Build
         run: ./gradlew build
 
-      - name: Publish to Snapshot Repository signed
-        if: ${{ env.USE_SIGNING == 'true' }}
-        env:
-          MAVEN_PASSPHRASE: ${{ secrets.MAVEN_GPG_PASS }}
-          MAVEN_KEY: ${{ secrets.MAVEN_GPG_KEY }}
-        run: ./gradlew publishSnapshot --no-parallel
-
       - name: Publish to Snapshot Repository
-        if: ${{ env.USE_SIGNING == 'false' }}
         run: ./gradlew publishSnapshot --no-parallel
