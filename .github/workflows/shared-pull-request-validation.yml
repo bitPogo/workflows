@@ -9,10 +9,8 @@ on:
         required: true
       maven-key:
         required: false
-        default: ''
       maven-pass:
         required: false
-        default: ''
 
 jobs:
   pull-request-validation:
@@ -41,7 +39,7 @@ jobs:
       - name: Set conditional enviroment
         run: |
           echo "MAVEN_PASSPHRASE=${{ secrets.maven-pass }}" >> $GITHUB_ENV
-          echo "MAVEN_KEY=${{ secrets.maven-key}}" >> $GITHUB_ENV
+          echo "MAVEN_KEY=${{ secrets.maven-key }}" >> $GITHUB_ENV
         if: ${{ USE_SIGNING }}
 
       - name: Lint
