@@ -36,6 +36,9 @@ jobs:
       - name: Setup gradle
         uses: gradle/gradle-build-action@v2
 
+      - name: Condition is
+        run: echo ${{ env.USE_SIGNING }}
+
       - name: Set conditional enviroment
         if: ${{ env.USE_SIGNING == 'true' }}
         run: |
