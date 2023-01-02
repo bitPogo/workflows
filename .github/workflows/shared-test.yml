@@ -29,6 +29,7 @@ jobs:
           { target: jvm, os: ubuntu-latest, tasks: jvmTest, continueOnError: false },
           { target: androidNativeArm, os: ubuntu-latest, tasks: androidNativeArm32Test androidNativeArm64Test, continueOnError: false },
           { target: androidNativeX, os: ubuntu-latest, tasks: androidNativeX64Test androidNativeX86Test, continueOnError: false },
+          { target: linuxMips, os: ubuntu-latest, tasks: linuxMips32Test linuxMipsel32Test, continueOnError: false },
         ]
     runs-on: ${{ matrix.config.os }}
 
