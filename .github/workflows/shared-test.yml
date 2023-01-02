@@ -33,6 +33,7 @@ jobs:
           { target: linuxMips, os: ubuntu-latest, tasks: linuxMips32Test linuxMipsel32Test, continueOnError: false },
           { target: macos, os: macos-latest, tasks: macosX64Test macosArm64Test, continueOnError: false },
           { target: tvos, os: macos-latest, tasks: tvosArm64Test tvosX64Test, continueOnError: false },
+          { target: windows, os: ubuntu-latest, tasks: mingwX86Test mingwX64Test, continueOnError: false },
         ]
     runs-on: ${{ matrix.config.os }}
 
