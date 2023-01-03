@@ -17,7 +17,7 @@ on:
 
 
 concurrency:
-  group: validation-${{ github.workflow }}@${{ github.event.pull_request.head.label || github.head_ref || github.ref }}
+  group: validation-${{ github.head_ref }}
   cancel-in-progress: true
 
 jobs:
