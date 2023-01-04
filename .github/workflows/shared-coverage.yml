@@ -1,0 +1,87 @@
+name: Run Checks
+
+on:
+  workflow_call:
+    inputs:
+      android:
+        required: false
+        type: boolean
+        default: false
+      verifyAndroid:
+        required: false
+        type: boolean
+        default: false
+      jvm:
+        required: false
+        type: boolean
+        default: false
+      verifyJvm:
+        required: false
+        type: boolean
+        default: false
+      kmp:
+        required: false
+        type: boolean
+        default: false
+      verifyKmp:
+        required: false
+        type: boolean
+        default: false
+    secrets:
+      github-token:
+        required: false
+      sonar-token:
+        required: false
+
+concurrency:
+  group: coverage-${{ github.head_ref }}
+  cancel-in-progress: true
+
+jobs:
+  coverage:
+    runs-on: ubuntu-latest
+
+    env:
+      useSonar: ${{ secrets.sonar-token != '' }}
+
+    name: Code Coverage
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin' # See 'Supported distributions' for available options
+          java-version: '11'
+
+      - name: Setup gradle
+        uses: gradle/gradle-build-action@v2
+
+      - name: Coverage Android
+        if: ${{ inputs.android == true }}
+        run: ./gradlew --no-daemon --stacktrace androidCoverage
+
+      - name: Verification Android
+        if: ${{ inputs.verifyAndroid == true }}
+        run: ./gradlew --no-daemon --stacktrace androidCoverageVerification
+
+      - name: Coverage jvm
+        if: ${{ inputs.jvm == true }}
+        run: ./gradlew --no-daemon --stacktrace jvmCoverage
+
+      - name: Verification Jvm
+        if: ${{ inputs.verifyJvm == true }}
+        run: ./gradlew --no-daemon --stacktrace jvmCoverageVerification
+
+      - name: Coverage KMP
+        if: ${{ inputs.kmp == true }}
+        run: ./gradlew --no-daemon --stacktrace multiplatformCoverage
+
+      - name: Verification KMP
+        if: ${{ inputs.verifyKmp == true }}
+        run: ./gradlew --no-daemon --stacktrace multiplatformCoverageVerification
+
+      - name: Sonarcloud
+        if: ${{ useSonar == true }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.github-token }}
+          SONAR_TOKEN: ${{ secrets.sonar-token }}
+        run: ./gradlew --no-daemon --stacktrace sonarqube --info
