@@ -55,7 +55,7 @@ jobs:
         uses: gradle/gradle-build-action@v2
 
       - name: Cleanup
-        if: contains(fromJson(inputs.platforms), matrix.config.target) && inputs.cleanup == true
+        if: contains(fromJson(inputs.platforms), matrix.config.target) && ${{ inputs.cleanup == true }}
         run: ./gradlew clean
 
       - name: Test ${{ matrix.config.target }} targets
