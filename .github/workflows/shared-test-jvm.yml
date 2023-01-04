@@ -36,6 +36,10 @@ jobs:
       - name: Setup gradle
         uses: gradle/gradle-build-action@v2
 
+      - name: Cleanup
+        if: inputs.cleanup == true
+        run: ./gradlew clean
+
       - name: Test
         if: endsWith(matrix.project, ':') == false
         continue-on-error: false
