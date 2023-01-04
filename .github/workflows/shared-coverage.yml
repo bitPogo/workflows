@@ -56,31 +56,31 @@ jobs:
         uses: gradle/gradle-build-action@v2
 
       - name: Coverage Android
-        if: ${{ inputs.android == true }}
+        if: inputs.android == true
         run: ./gradlew --no-daemon --stacktrace androidCoverage
 
       - name: Verification Android
-        if: ${{ inputs.verifyAndroid == true }}
+        if: inputs.verifyAndroid == true
         run: ./gradlew --no-daemon --stacktrace androidCoverageVerification
 
       - name: Coverage jvm
-        if: ${{ inputs.jvm == true }}
+        if: inputs.jvm == true
         run: ./gradlew --no-daemon --stacktrace jvmCoverage
 
       - name: Verification Jvm
-        if: ${{ inputs.verifyJvm == true }}
+        if: inputs.verifyJvm == true
         run: ./gradlew --no-daemon --stacktrace jvmCoverageVerification
 
       - name: Coverage KMP
-        if: ${{ inputs.kmp == true }}
+        if: inputs.kmp == true
         run: ./gradlew --no-daemon --stacktrace multiplatformCoverage
 
       - name: Verification KMP
-        if: ${{ inputs.verifyKmp == true }}
+        if: inputs.verifyKmp == true
         run: ./gradlew --no-daemon --stacktrace multiplatformCoverageVerification
 
       - name: Sonarcloud
-        if: ${{ useSonar == true }}
+        if: useSonar == true
         env:
           GITHUB_TOKEN: ${{ secrets.github-token }}
           SONAR_TOKEN: ${{ secrets.sonar-token }}
