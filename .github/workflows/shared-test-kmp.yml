@@ -24,7 +24,7 @@ jobs:
           { target: android, os: ubuntu-latest, tasks: testDebugUnitTest testReleaseUnitTest, continueOnError: false },
           { target: androidNativeArm, os: ubuntu-latest, tasks: androidNativeArm32Test androidNativeArm64Test, continueOnError: false },
           { target: androidNativeX, os: ubuntu-latest, tasks: androidNativeX64Test androidNativeX86Test, continueOnError: false },
-          { target: ios, os: macos-latest, tasks: iosArm64Test iosX64Test iosSimulatorArm64Test, continueOnError: false }
+          { target: ios, os: macos-latest, tasks: iosArm64Test iosX64Test iosSimulatorArm64Test, continueOnError: false },
           { target: iosLegacy, os: macos-latest, tasks: iosArm32Test iosArm64Test iosX64Test iosSimulatorArm64Test, continueOnError: false },
           { target: js, os: ubuntu-latest, tasks: jsTest, continueOnError: false },
           { target: jvm, os: ubuntu-latest, tasks: jvmTest, continueOnError: false },
