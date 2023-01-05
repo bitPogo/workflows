@@ -63,7 +63,7 @@ jobs:
         if: inputs.verifyAndroid == true
         run: ./gradlew --no-daemon --stacktrace androidCoverageVerification
 
-      - name: Coverage jvm
+      - name: Coverage Jvm
         if: inputs.jvm == true
         run: ./gradlew --no-daemon --stacktrace jvmCoverage
 
