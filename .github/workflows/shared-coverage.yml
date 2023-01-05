@@ -80,7 +80,7 @@ jobs:
         run: ./gradlew --no-daemon --stacktrace multiplatformCoverageVerification
 
       - name: Sonarcloud
-        if: useSonar == true
+        if: env.useSonar == true
         env:
           GITHUB_TOKEN: ${{ secrets.github-token }}
           SONAR_TOKEN: ${{ secrets.sonar-token }}
