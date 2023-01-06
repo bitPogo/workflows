@@ -32,10 +32,10 @@ jobs:
           { target: linuxX, os: ubuntu-latest, tasks: linuxX64Test, continueOnError: false },
           { target: linuxMips, os: ubuntu-latest, tasks: linuxMips32Test linuxMipsel32Test, continueOnError: false },
           { target: macos, os: macos-latest, tasks: macosX64Test macosArm64Test, continueOnError: false },
-          { target: tvos, os: macos-latest, tasks: tvosArm64Test tvosX64Test, continueOnError: false },
-          { target: watchos, os: macos-latest, tasks: watchosArm32Test watchosArm64Test watchosX64Test watchosSimulatorArm64Test, continueOnError: false },
-          { target: watchosLegacy, os: macos-latest, tasks: watchosArm32Test watchosArm64Test watchosX64Test watchosX86Test watchosSimulatorArm64Test, continueOnError: false },
-          { target: windows, os: ubuntu-latest, tasks: mingwX86Test mingwX64Test, continueOnError: false },
+          { target: mingw, os: ubuntu-latest, tasks: mingwX86Test mingwX64Test, continueOnError: false },
+          { target: tvos, os: macos-latest, tasks: tvosX64Test tvosSimulatorArm64Test, continueOnError: false },
+          { target: watchos, os: macos-latest, tasks: watchosX64Test watchosSimulatorArm64Test, continueOnError: false },
+          { target: watchosLegacy, os: macos-latest, tasks: watchosX64Test watchosX86Test watchosSimulatorArm64Test, continueOnError: false },
         ]
     runs-on: ${{ matrix.config.os }}
 
