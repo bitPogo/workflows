@@ -41,14 +41,25 @@ jobs:
 
     name: Check ${{ matrix.config.target }}
     steps:
-      - uses: actions/checkout@v3
-        if: contains(fromJson(inputs.platforms), matrix.config.target)
+      - name: Display runner context
+        run: hostname -s
 
-      - uses: actions/setup-java@v3
+      - name: Checkout Repo
         if: contains(fromJson(inputs.platforms), matrix.config.target)
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Setup Java
+        if: contains(fromJson(inputs.platforms), matrix.config.target)
+        uses: actions/setup-java@v3
         with:
           distribution: 'temurin' # See 'Supported distributions' for available options
           java-version: '11'
+
+      - name: Validate Gradle Wrapper
+        if: contains(fromJson(inputs.platforms), matrix.config.target)
+        uses: gradle/wrapper-validation-action@v1
 
       - name: Setup gradle
         if: contains(fromJson(inputs.platforms), matrix.config.target)
