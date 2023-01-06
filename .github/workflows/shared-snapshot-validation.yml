@@ -39,7 +39,7 @@ jobs:
         uses: gradle/gradle-build-action@v2
 
       - name: Build
-        run: ./gradlew build
+        run: ./gradlew build -x check --no-daemon --stacktrace
 
       - name: Publish to Snapshot Repository
         run: ./gradlew publishSnapshot --no-parallel

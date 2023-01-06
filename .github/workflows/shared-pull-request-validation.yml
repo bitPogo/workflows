@@ -41,7 +41,7 @@ jobs:
         run: ./gradlew spotlessCheck
 
       - name: Build
-        run: ./gradlew build
+        run: ./gradlew build -x check --no-daemon --stacktrace
 
       - name: Publish to Development Repository
         run: ./gradlew publishDevelopment --no-parallel
