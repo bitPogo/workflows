@@ -1,0 +1,68 @@
+name: Run Code Conventions
+
+on:
+  workflow_call:
+    inputs:
+      spotelss:
+        required: false
+        default: true
+      detekt:
+        required: false
+        default: true
+      save-detekt-report:
+        required: false
+        default: false
+      api-check:
+        required: false
+        default: true
+
+
+concurrency:
+  group: conventions-${{ github.head_ref }}
+  cancel-in-progress: true
+
+jobs:
+  conventions:
+    runs-on: ubuntu-latest
+
+    name: Code Conventions
+    steps:
+      - name: Display runner context
+        run: hostname -s
+
+      - name: Checkout Repo
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Setup Java
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin' # See 'Supported distributions' for available options
+          java-version: '11'
+
+      - name: Validate Gradle Wrapper
+        uses: gradle/wrapper-validation-action@v1
+
+      - name: Setup gradle
+        uses: gradle/gradle-build-action@v2
+
+      - name: Save Detekt Report
+        if: inputs.save-detekt-report == true
+        uses: actions/upload-artifact@v3
+        with:
+          name: detekt-report
+          path: **/reports/detekt/detekt.xml
+          retention-days: 1
+
+      - name: Lint
+        if: inputs.spotelss == true
+        run: ./gradlew spotlessCheck
+
+      - name: Static Analysis
+        if: inputs.detekt == true
+        run: ./gradlew detekt
+
+      - name: Api check
+        if: inputs.api-check == true
+        run: ./gradlew apiCheck
