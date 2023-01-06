@@ -57,6 +57,13 @@ jobs:
           distribution: 'temurin' # See 'Supported distributions' for available options
           java-version: '11'
 
+      - name: Cache Konan
+        if: contains(fromJson(inputs.platforms), matrix.config.target)
+        uses: actions/cache@v3
+        with:
+          path: ~/.konan
+          key: ${{ matrix.config.target }}-gradle
+
       - name: Validate Gradle Wrapper
         if: contains(fromJson(inputs.platforms), matrix.config.target)
         uses: gradle/wrapper-validation-action@v1

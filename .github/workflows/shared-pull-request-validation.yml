@@ -37,6 +37,12 @@ jobs:
           distribution: 'temurin' # See 'Supported distributions' for available options
           java-version: '11'
 
+      - name: Cache Konan
+        uses: actions/cache@v3
+        with:
+          path: ~/.konan
+          key: ${{ runner.os }}-gradle
+
       - name: Validate Gradle Wrapper
         uses: gradle/wrapper-validation-action@v1
 
