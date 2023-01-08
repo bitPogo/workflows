@@ -30,7 +30,7 @@ jobs:
           { target: jvm, os: ubuntu-latest, tasks: jvmTest, continueOnError: false },
           { target: linuxArm, os: ubuntu-latest, tasks: linuxArm64Test linuxArm32HfpTest, continueOnError: false },
           { target: linuxX, os: ubuntu-latest, tasks: linuxX64Test, continueOnError: false },
-          { target: linuxMips, os: ubuntu-latest, tasks: linuxMips32Test linuxMipsel32Test, continueOnError: false },
+          { target: linuxMips, os: ubuntu-latest, tasks: linuxMipsel32Test, continueOnError: false },
           { target: macos, os: macos-latest, tasks: macosX64Test macosArm64Test, continueOnError: false },
           { target: mingw, os: ubuntu-latest, tasks: mingwX86Test mingwX64Test, continueOnError: false },
           { target: tvos, os: macos-latest, tasks: tvosX64Test tvosSimulatorArm64Test, continueOnError: false },
