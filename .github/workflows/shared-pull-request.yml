@@ -2,6 +2,11 @@ name: Antibytes CI - Pull-Request
 
 on:
   workflow_call:
+    inputs:
+      uses-mips:
+        required: false
+        type: boolean
+        default: true
     secrets:
       upload-username:
         required: true
@@ -13,7 +18,7 @@ on:
         required: false
 
 jobs:
-  build-macos:
+  publish-pull-request:
     runs-on: macos-latest
     steps:
       - name: Display runner context
@@ -36,19 +41,25 @@ jobs:
       - name: Setup gradle
         uses: gradle/gradle-build-action@v2
 
-      - name: Cache Build
+      - name: Cache Konan
         uses: actions/cache@v3
         with:
-          path: |
-            ~/.konan
-            **/build/**/*
-          key: build-${{ github.head_ref }}
+          path: ~/.konan
+          key: macos-gradle
+          restore-keys: |
+            ios-gradle
+            tvos-gradle
+            watchos-gradle
 
       - name: Build
         run: ./gradlew build -x check --no-daemon --stacktrace
 
+      - name: Publish to Development Repository
+        run: ./gradlew -x build publishDevelopment --no-parallel
 
-  build-linux:
+
+  publish-pull-request-mips:
+    if: inputs.uses-mips == true
     runs-on: ubuntu-latest
     needs: build-macos
     steps:
@@ -66,13 +77,15 @@ jobs:
           distribution: 'temurin' # See 'Supported distributions' for available options
           java-version: '11'
 
-      - name: Cache Build
+      - name: Cache Konan
         uses: actions/cache@v3
         with:
-          path: |
-            ~/.konan
-            **/build/**/*
-          key: build-${{ github.head_ref }}
+          path: ~/.konan
+          key: linux-gradle
+          restore-keys: |
+            jvm-gradle
+            android-gradle
+            js-gradle
 
       - name: Validate Gradle Wrapper
         uses: gradle/wrapper-validation-action@v1
@@ -83,43 +96,5 @@ jobs:
       - name: Build
         run: ./gradlew build -x check --no-daemon --stacktrace
 
-  publish-pull-request:
-    runs-on: ubuntu-latest
-    needs: build-linux
-    env:
-      PACKAGE_REGISTRY_UPLOAD_USERNAME: ${{ secrets.upload-username }}
-      PACKAGE_REGISTRY_UPLOAD_TOKEN: ${{ secrets.upload-token }}
-      MAVEN_PASSPHRASE: ${{ secrets.maven-pass }}
-      MAVEN_KEY: ${{ secrets.maven-key }}
-
-    steps:
-      - name: Display runner context
-        run: hostname -s
-
-      - name: Checkout Repo
-        uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
-
-      - name: Setup Java
-        uses: actions/setup-java@v3
-        with:
-          distribution: 'temurin' # See 'Supported distributions' for available options
-          java-version: '11'
-
-      - name: Cache Build
-        uses: actions/cache@v3
-        with:
-          path: |
-            ~/.konan
-            **/build/**/*
-          key: build-${{ github.head_ref }}
-
-      - name: Validate Gradle Wrapper
-        uses: gradle/wrapper-validation-action@v1
-
-      - name: Setup gradle
-        uses: gradle/gradle-build-action@v2
-
-      - name: Publish to Development Repository
+      - name: Publish Mips to Development Repository
         run: ./gradlew -x build publishDevelopment --no-parallel
