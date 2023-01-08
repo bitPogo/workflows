@@ -36,12 +36,21 @@ jobs:
       - name: Setup gradle
         uses: gradle/gradle-build-action@v2
 
+      - name: Cache Build
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.konan
+            **/build/**/*
+          key: build-${{ github.head_ref }}
+
       - name: Build
         run: ./gradlew build -x check --no-daemon --stacktrace
 
 
   build-linux:
     runs-on: ubuntu-latest
+    needs: build-macos
     steps:
       - name: Display runner context
         run: hostname -s
@@ -76,7 +85,7 @@ jobs:
 
   publish-pull-request:
     runs-on: ubuntu-latest
-    needs: [build-macos, build-linux]
+    needs: build-linux
     env:
       PACKAGE_REGISTRY_UPLOAD_USERNAME: ${{ secrets.upload-username }}
       PACKAGE_REGISTRY_UPLOAD_TOKEN: ${{ secrets.upload-token }}
