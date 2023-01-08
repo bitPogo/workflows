@@ -58,6 +58,9 @@ jobs:
             **/reports/jacoco/**/*.xml
             **/test-results/**/*
           key: reports-${{ github.head_ref }}
+          restore-keys: |
+            reports-${{ github.head_ref }}
+            jvm-gradle
 
       - name: Sonarcloud
         env:
