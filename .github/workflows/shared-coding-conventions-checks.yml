@@ -9,10 +9,10 @@ on:
       detekt:
         required: false
         default: true
-      save-detekt-report:
-        required: false
-        default: false
       api-check:
+        required: false
+        default: true
+      cache-results:
         required: false
         default: true
 
@@ -48,6 +48,7 @@ jobs:
         uses: gradle/gradle-build-action@v2
 
       - name: Cache Reports
+        if: inputs.cache-results == true
         uses: actions/cache@v3
         with:
           path: |

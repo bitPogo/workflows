@@ -27,6 +27,9 @@ on:
         required: false
         type: boolean
         default: false
+      cache-results:
+        required: false
+        default: true
     secrets:
       github-token:
         required: false
@@ -67,6 +70,7 @@ jobs:
         uses: gradle/gradle-build-action@v2
 
       - name: Cache Reports
+        if: inputs.cache-results == true
         uses: actions/cache@v3
         with:
           path: |
