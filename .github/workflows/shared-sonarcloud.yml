@@ -1,32 +1,14 @@
-name: Run Checks
+name: Run Sonarcloud
 
 on:
   workflow_call:
     inputs:
-      android:
+      detekt:
         required: false
-        type: boolean
-        default: false
-      verifyAndroid:
+        default: true
+      coverage:
         required: false
-        type: boolean
-        default: false
-      jvm:
-        required: false
-        type: boolean
-        default: false
-      verifyJvm:
-        required: false
-        type: boolean
-        default: false
-      kmp:
-        required: false
-        type: boolean
-        default: false
-      verifyKmp:
-        required: false
-        type: boolean
-        default: false
+        default: true
     secrets:
       github-token:
         required: false
@@ -75,32 +57,7 @@ jobs:
             **/test-results/**/*
           key: reports-${{ github.head_ref }}
 
-      - name: Coverage Android
-        if: inputs.android == true
-        run: ./gradlew --no-daemon --stacktrace androidCoverage
-
-      - name: Verification Android
-        if: inputs.verifyAndroid == true
-        run: ./gradlew --no-daemon --stacktrace androidCoverageVerification
-
-      - name: Coverage Jvm
-        if: inputs.jvm == true
-        run: ./gradlew --no-daemon --stacktrace jvmCoverage
-
-      - name: Verification Jvm
-        if: inputs.verifyJvm == true
-        run: ./gradlew --no-daemon --stacktrace jvmCoverageVerification
-
-      - name: Coverage KMP
-        if: inputs.kmp == true
-        run: ./gradlew --no-daemon --stacktrace multiplatformCoverage
-
-      - name: Verification KMP
-        if: inputs.verifyKmp == true
-        run: ./gradlew --no-daemon --stacktrace multiplatformCoverageVerification
-
       - name: Sonarcloud
-        if: env.useSonar == true
         env:
           GITHUB_TOKEN: ${{ secrets.github-token }}
           SONAR_TOKEN: ${{ secrets.sonar-token }}
