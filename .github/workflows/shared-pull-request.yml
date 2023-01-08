@@ -20,6 +20,11 @@ on:
 jobs:
   publish-pull-request:
     runs-on: macos-latest
+    env:
+      PACKAGE_REGISTRY_UPLOAD_USERNAME: ${{ secrets.upload-username }}
+      PACKAGE_REGISTRY_UPLOAD_TOKEN: ${{ secrets.upload-token }}
+      MAVEN_PASSPHRASE: ${{ secrets.maven-pass }}
+      MAVEN_KEY: ${{ secrets.maven-key }}
     steps:
       - name: Display runner context
         run: hostname -s
@@ -62,6 +67,11 @@ jobs:
     if: inputs.uses-mips == true
     runs-on: ubuntu-latest
     needs: publish-pull-request
+    env:
+      PACKAGE_REGISTRY_UPLOAD_USERNAME: ${{ secrets.upload-username }}
+      PACKAGE_REGISTRY_UPLOAD_TOKEN: ${{ secrets.upload-token }}
+      MAVEN_PASSPHRASE: ${{ secrets.maven-pass }}
+      MAVEN_KEY: ${{ secrets.maven-key }}
     steps:
       - name: Display runner context
         run: hostname -s
@@ -97,4 +107,4 @@ jobs:
         run: ./gradlew build -x check --no-daemon --stacktrace
 
       - name: Publish Mips to Development Repository
-        run: ./gradlew -x build publishLinuxMips32ToDevelopment publishLinuxMipsel32PublicationToDevelopment --no-parallel
+        run: ./gradlew -x build publishLinuxMips32PublicationToDevelopmentRepository publishLinuxMipsel32PublicationToDevelopmentRepository --no-parallel
