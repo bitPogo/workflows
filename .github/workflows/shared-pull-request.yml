@@ -1,0 +1,112 @@
+name: Antibytes CI - Pull-Request Validation
+
+on:
+  workflow_call:
+    secrets:
+      upload-username:
+        required: true
+      upload-token:
+        required: true
+      maven-key:
+        required: false
+      maven-pass:
+        required: false
+
+jobs:
+  build-macos:
+    runs-on: macos-latest
+    steps:
+      - name: Display runner context
+        run: hostname -s
+
+      - name: Checkout Repo
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Setup Java
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin' # See 'Supported distributions' for available options
+          java-version: '11'
+
+      - name: Validate Gradle Wrapper
+        uses: gradle/wrapper-validation-action@v1
+
+      - name: Setup gradle
+        uses: gradle/gradle-build-action@v2
+
+      - name: Build
+        run: ./gradlew build -x check --no-daemon --stacktrace
+
+
+  build-linux:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Display runner context
+        run: hostname -s
+
+      - name: Checkout Repo
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Setup Java
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin' # See 'Supported distributions' for available options
+          java-version: '11'
+
+      - name: Cache Build
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.konan
+            **/build/**/*
+          key: build-${{ github.head_ref }}
+
+      - name: Validate Gradle Wrapper
+        uses: gradle/wrapper-validation-action@v1
+
+      - name: Setup gradle
+        uses: gradle/gradle-build-action@v2
+
+      - name: Build
+        run: ./gradlew build -x check --no-daemon --stacktrace
+
+
+    publish-pull-request:
+      runs-on: ubuntu-latest
+      needs: [build-macos, build-linux]
+      steps:
+        - name: Display runner context
+          run: hostname -s
+
+        - name: Checkout Repo
+          uses: actions/checkout@v3
+          with:
+            fetch-depth: 0
+
+        - name: Setup Java
+          uses: actions/setup-java@v3
+          with:
+            distribution: 'temurin' # See 'Supported distributions' for available options
+            java-version: '11'
+
+        - name: Cache Build
+          uses: actions/cache@v3
+          with:
+            path: |
+              ~/.konan
+              **/build/**/*
+            key: build-${{ github.head_ref }}
+
+        - name: Validate Gradle Wrapper
+          uses: gradle/wrapper-validation-action@v1
+
+        - name: Setup gradle
+          uses: gradle/gradle-build-action@v2
+
+        - name: Publish to Development Repository
+          run: ./gradlew -x build publishDevelopment --no-parallel
