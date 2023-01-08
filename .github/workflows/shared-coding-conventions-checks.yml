@@ -5,15 +5,19 @@ on:
     inputs:
       spotelss:
         required: false
+        type: boolean
         default: true
       detekt:
         required: false
+        type: boolean
         default: true
       api-check:
         required: false
+        type: boolean
         default: true
       cache-results:
         required: false
+        type: boolean
         default: true
 
 

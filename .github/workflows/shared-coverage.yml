@@ -29,6 +29,7 @@ on:
         default: false
       cache-results:
         required: false
+        type: boolean
         default: true
     secrets:
       github-token:
