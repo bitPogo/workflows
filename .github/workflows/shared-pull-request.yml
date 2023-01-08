@@ -1,4 +1,4 @@
-name: Antibytes CI - Pull-Request Validation
+name: Antibytes CI - Pull-Request
 
 on:
   workflow_call:
