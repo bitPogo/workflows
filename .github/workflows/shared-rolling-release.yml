@@ -1,4 +1,4 @@
-name: Antibytes CI - Snapshot
+name: Antibytes CI - Rolling Release
 
 on:
   workflow_call:
@@ -59,8 +59,8 @@ jobs:
       - name: Build
         run: ./gradlew build -x check --no-daemon --stacktrace
 
-      - name: Publish to Snapshot Repository
-        run: ./gradlew -x build publishSnapshot --no-parallel
+      - name: Publish to Rolling Release Repository
+        run: ./gradlew -x build publishRollingRelease --no-parallel
 
 
   snapshot-mips:
@@ -106,5 +106,5 @@ jobs:
       - name: Build
         run: ./gradlew build -x check --no-daemon --stacktrace
 
-      - name: Publish Mips to Snapshot Repository
-        run: ./gradlew -x build publishLinuxMips32PublicationToSnapshotRepository publishLinuxMipsel32PublicationToSnapshotRepository --no-parallel
+      - name: Publish Mips to Rolling Release Repository
+        run: ./gradlew -x build publishLinuxMips32PublicationToRollingReleaseRepository publishLinuxMipsel32PublicationToRollingReleaseRepository --no-parallel
