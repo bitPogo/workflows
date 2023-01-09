@@ -22,7 +22,7 @@ on:
         required: true
 
 jobs:
-  snapshot-request:
+  release:
     runs-on: macos-latest
     env:
       PACKAGE_REGISTRY_UPLOAD_USERNAME: ${{ secrets.upload-username }}
@@ -72,10 +72,10 @@ jobs:
         run: ./gradlew -x build publishRollingRelease --no-parallel
 
 
-  snapshot-mips:
+  release-mips:
     if: inputs.uses-mips == true
     runs-on: ubuntu-latest
-    needs: publish-pull-request
+    needs: release
     env:
       PACKAGE_REGISTRY_UPLOAD_USERNAME: ${{ secrets.upload-username }}
       PACKAGE_REGISTRY_UPLOAD_TOKEN: ${{ secrets.upload-token }}

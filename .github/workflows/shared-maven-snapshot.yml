@@ -22,7 +22,7 @@ on:
         required: true
 
 jobs:
-  snapshot-request:
+  snapshot:
     runs-on: macos-latest
     env:
       PACKAGE_REGISTRY_UPLOAD_USERNAME: ${{ secrets.upload-username }}
@@ -75,7 +75,7 @@ jobs:
   snapshot-mips:
     if: inputs.uses-mips == true
     runs-on: ubuntu-latest
-    needs: publish-pull-request
+    needs: snapshot
     env:
       PACKAGE_REGISTRY_UPLOAD_USERNAME: ${{ secrets.upload-username }}
       PACKAGE_REGISTRY_UPLOAD_TOKEN: ${{ secrets.upload-token }}
@@ -121,4 +121,4 @@ jobs:
         run: ./gradlew publishLinuxMips32PublicationToMavenCentralSnapshotRepository publishLinuxMipsel32PublicationToMavenCentralSnapshotRepository -x build --stacktrace --no-parallel
 
       - name: Publish Mips to Snapshot Repository
-          run: ./gradlew -x build publishLinuxMips32PublicationToSnapshotRepository publishLinuxMipsel32PublicationToSnapshotRepository --no-parallel
+        run: ./gradlew -x build publishLinuxMips32PublicationToSnapshotRepository publishLinuxMipsel32PublicationToSnapshotRepository --no-parallel

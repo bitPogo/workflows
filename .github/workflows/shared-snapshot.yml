@@ -18,7 +18,7 @@ on:
         required: false
 
 jobs:
-  snapshot-request:
+  snapshot:
     runs-on: macos-latest
     env:
       PACKAGE_REGISTRY_UPLOAD_USERNAME: ${{ secrets.upload-username }}
@@ -66,7 +66,7 @@ jobs:
   snapshot-mips:
     if: inputs.uses-mips == true
     runs-on: ubuntu-latest
-    needs: publish-pull-request
+    needs: snapshot
     env:
       PACKAGE_REGISTRY_UPLOAD_USERNAME: ${{ secrets.upload-username }}
       PACKAGE_REGISTRY_UPLOAD_TOKEN: ${{ secrets.upload-token }}
