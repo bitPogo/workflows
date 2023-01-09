@@ -66,10 +66,10 @@ jobs:
         run: ./gradlew build -x check --no-daemon --stacktrace
 
       - name: Publish to Maven Central
-        run: ./gradlew publishMavenCentral -x build --stacktrace --no-parallel
+        run: ./gradlew publishMavenCentralSnapshot -x build --stacktrace --no-parallel
 
-      - name: Publish to Maven Central Repository
-        run: ./gradlew -x build publishRollingRelease --no-parallel
+      - name: Publish to Snapshot Repository
+        run: ./gradlew -x build publishSnapshot --no-parallel
 
 
   snapshot-mips:
@@ -117,8 +117,8 @@ jobs:
       - name: Build
         run: ./gradlew build -x check --no-daemon --stacktrace
 
-      - name: Publish Mips to Maven Central Repository
-        run: ./gradlew publishLinuxMips32PublicationToMavenCentralRepository publishLinuxMipsel32PublicationToMavenCentralRepository -x build --stacktrace --no-parallel
+      - name: Publish to Rolling Release Repository
+        run: ./gradlew publishLinuxMips32PublicationToMavenCentralSnapshotRepository publishLinuxMipsel32PublicationToMavenCentralSnapshotRepository -x build --stacktrace --no-parallel
 
-      - name: Publish Mips to Rolling Release Repository
-        run: ./gradlew -x build publishLinuxMips32PublicationToReleaseRepository publishLinuxMipsel32PublicationToReleaseRepository --no-parallel
+      - name: Publish Mips to Snapshot Repository
+          run: ./gradlew -x build publishLinuxMips32PublicationToSnapshotRepository publishLinuxMipsel32PublicationToSnapshotRepository --no-parallel
