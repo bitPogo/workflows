@@ -118,7 +118,7 @@ jobs:
         run: ./gradlew build -x check --no-daemon --stacktrace
 
       - name: Publish Mips to Maven Central Snapshot Repository
-        run: ./gradlew publishLinuxMipsToMavenCentralSnapshot -x build --no-parallel --stacktrace
+        run: ./gradlew publishLinuxMipsMavenCentralSnapshot -x build --no-parallel --stacktrace
 
       - name: Publish Mips to Snapshot Repository
-        run: ./gradlew -x build publishLinuxMipsToSnapshot --no-parallel --stacktrace
+        run: ./gradlew -x build publishLinuxMipsSnapshot --no-parallel --stacktrace
