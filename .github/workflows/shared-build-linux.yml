@@ -5,7 +5,7 @@ on:
 
 jobs:
   build-linux:
-    runs-on: linux-latest
+    runs-on: ubuntu-latest
     steps:
       - name: Display runner context
         run: hostname -s

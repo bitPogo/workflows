@@ -3,6 +3,10 @@ name: Antibytes CI - Release
 on:
   workflow_call:
     inputs:
+      use-linux-only:
+        required: false
+        type: boolean
+        default: false
       uses-mips:
         required: false
         type: boolean
@@ -23,6 +27,7 @@ on:
 
 jobs:
   snapshot:
+    if: inputs.use-linux-only == false
     runs-on: macos-latest
     env:
       PACKAGE_REGISTRY_UPLOAD_USERNAME: ${{ secrets.upload-username }}
@@ -67,8 +72,53 @@ jobs:
         run: ./gradlew publishSnapshot -x build --no-parallel
 
 
+  snapshot-linux-only:
+    if: inputs.use-linux-only == true
+    runs-on: ubuntu-latest
+    env:
+      PACKAGE_REGISTRY_UPLOAD_USERNAME: ${{ secrets.upload-username }}
+      PACKAGE_REGISTRY_UPLOAD_TOKEN: ${{ secrets.upload-token }}
+      MAVEN_PASSPHRASE: ${{ secrets.maven-pass }}
+      MAVEN_KEY: ${{ secrets.maven-key }}
+      OSSR_USERNAME: ${{ secrets.ossr-username }}
+      OSSR_PASSWORD: ${{ secrets.ossr-token }}
+    steps:
+      - name: Display runner context
+        run: hostname -s
+
+      - name: Checkout Repo
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Setup Java
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin' # See 'Supported distributions' for available options
+          java-version: '11'
+
+      - name: Validate Gradle Wrapper
+        uses: gradle/wrapper-validation-action@v1
+
+      - name: Setup gradle
+        uses: gradle/gradle-build-action@v2
+
+      - name: Restore Build and Konan
+        uses: actions/cache/restore@v3
+        with:
+          path: |
+            ~/.konan
+            **/build/**/*
+          key: mac-build
+
+      - name: Publish to Maven Central
+        run: ./gradlew publishMavenCentralSnapshot -x build --stacktrace --no-parallel
+
+      - name: Publish to Snapshot Repository
+        run: ./gradlew publishSnapshot -x build --no-parallel
+
   snapshot-mips:
-    if: inputs.uses-mips == true
+    if: inputs.uses-mips == true && inputs.use-linux-only == false
     runs-on: ubuntu-latest
     needs: snapshot
     env:
