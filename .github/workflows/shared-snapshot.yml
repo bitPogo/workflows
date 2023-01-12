@@ -46,15 +46,13 @@ jobs:
       - name: Setup gradle
         uses: gradle/gradle-build-action@v2
 
-      - name: Cache Konan
+      - name: Cache Build & Konan
         uses: actions/cache@v3
         with:
-          path: ~/.konan
-          key: macos-gradle
-          restore-keys: |
-            ios-gradle
-            tvos-gradle
-            watchos-gradle
+          path: |
+            ~/.konan
+            **/build/**/*
+          key: mac-build
 
       - name: Build
         run: ./gradlew build -x check --no-daemon --stacktrace
@@ -87,15 +85,13 @@ jobs:
           distribution: 'temurin' # See 'Supported distributions' for available options
           java-version: '11'
 
-      - name: Cache Konan
+      - name: Cache Build & Konan
         uses: actions/cache@v3
         with:
-          path: ~/.konan
-          key: linux-gradle
-          restore-keys: |
-            jvm-gradle
-            android-gradle
-            js-gradle
+          path: |
+            ~/.konan
+            **/build/**/*
+          key: linux-build
 
       - name: Validate Gradle Wrapper
         uses: gradle/wrapper-validation-action@v1
