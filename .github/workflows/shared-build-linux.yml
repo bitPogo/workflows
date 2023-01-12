@@ -28,6 +28,9 @@ jobs:
       - name: Setup gradle
         uses: gradle/gradle-build-action@v2
 
+      - name: Build
+        run: ./gradlew clean build -x check --no-daemon --stacktrace
+
       - name: Cache Build and Konan
         uses: actions/cache/save@v3
         with:
@@ -35,6 +38,3 @@ jobs:
             ~/.konan
             **/build/**/*
           key: linux-build
-
-      - name: Build
-        run: ./gradlew clean build -x check --no-daemon --stacktrace
