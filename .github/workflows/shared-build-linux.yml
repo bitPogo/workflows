@@ -4,7 +4,7 @@ on:
   workflow_call:
 
 jobs:
-  build-mac:
+  build-linux:
     runs-on: linux-latest
     steps:
       - name: Display runner context
