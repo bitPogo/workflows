@@ -28,13 +28,13 @@ jobs:
       - name: Setup gradle
         uses: gradle/gradle-build-action@v2
 
-      - name: Cache Build & Konan
-        uses: actions/cache@v3
+      - name: Cache Build and Konan
+        uses: actions/cache/save@v3
         with:
           path: |
             ~/.konan
             **/build/**/*
-          key: macos-build-${{ github.head_ref }}
+          key: macos-build
 
       - name: Build
         run: ./gradlew clean build -x check --no-daemon --stacktrace

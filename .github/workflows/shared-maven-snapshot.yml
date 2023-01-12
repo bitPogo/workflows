@@ -52,22 +52,19 @@ jobs:
       - name: Setup gradle
         uses: gradle/gradle-build-action@v2
 
-      - name: Cache Build & Konan
-        uses: actions/cache@v3
+      - name: Restore Build and Konan
+        uses: actions/cache/restore@v3
         with:
           path: |
             ~/.konan
             **/build/**/*
           key: mac-build
 
-      - name: Build
-        run: ./gradlew build -x check --no-daemon --stacktrace
-
       - name: Publish to Maven Central
         run: ./gradlew publishMavenCentralSnapshot -x build --stacktrace --no-parallel
 
       - name: Publish to Snapshot Repository
-        run: ./gradlew -x build publishSnapshot --no-parallel
+        run: ./gradlew publishSnapshot -x build --no-parallel
 
 
   snapshot-mips:
@@ -96,8 +93,8 @@ jobs:
           distribution: 'temurin' # See 'Supported distributions' for available options
           java-version: '11'
 
-      - name: Cache Build & Konan
-        uses: actions/cache@v3
+      - name: Restore Build and Konan
+        uses: actions/cache/restore@v3
         with:
           path: |
             ~/.konan
@@ -114,4 +111,4 @@ jobs:
         run: ./gradlew publishLinuxMipsMavenCentralSnapshot -x build --no-parallel --stacktrace
 
       - name: Publish Mips to Snapshot Repository
-        run: ./gradlew -x build publishLinuxMipsSnapshot --no-parallel --stacktrace
+        run: ./gradlew publishLinuxMipsSnapshot -x build --no-parallel --stacktrace

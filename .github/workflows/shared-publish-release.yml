@@ -1,4 +1,4 @@
-name: Antibytes CI - Snapshot
+name: Antibytes CI - Release
 
 on:
   workflow_call:
@@ -16,15 +16,21 @@ on:
         required: false
       maven-pass:
         required: false
+      ossr-username:
+        required: true
+      ossr-token:
+        required: true
 
 jobs:
-  snapshot:
+  release:
     runs-on: macos-latest
     env:
       PACKAGE_REGISTRY_UPLOAD_USERNAME: ${{ secrets.upload-username }}
       PACKAGE_REGISTRY_UPLOAD_TOKEN: ${{ secrets.upload-token }}
       MAVEN_PASSPHRASE: ${{ secrets.maven-pass }}
       MAVEN_KEY: ${{ secrets.maven-key }}
+      OSSR_USERNAME: ${{ secrets.ossr-username }}
+      OSSR_PASSWORD: ${{ secrets.ossr-token }}
     steps:
       - name: Display runner context
         run: hostname -s
@@ -46,30 +52,32 @@ jobs:
       - name: Setup gradle
         uses: gradle/gradle-build-action@v2
 
-      - name: Cache Build & Konan
-        uses: actions/cache@v3
+      - name: Restore Build and Konan
+        uses: actions/cache/restore@v3
         with:
           path: |
             ~/.konan
             **/build/**/*
           key: mac-build
 
-      - name: Build
-        run: ./gradlew build -x check --no-daemon --stacktrace
+      - name: Publish to Maven Central
+        run: ./gradlew publishMavenCentral -x build --stacktrace --no-parallel
 
-      - name: Publish to Snapshot Repository
-        run: ./gradlew -x build publishSnapshot --no-parallel
+      - name: Publish to Maven Central Repository
+        run: ./gradlew publishRollingRelease -x build --no-parallel
 
 
-  snapshot-mips:
+  release-mips:
     if: inputs.uses-mips == true
     runs-on: ubuntu-latest
-    needs: snapshot
+    needs: release
     env:
       PACKAGE_REGISTRY_UPLOAD_USERNAME: ${{ secrets.upload-username }}
       PACKAGE_REGISTRY_UPLOAD_TOKEN: ${{ secrets.upload-token }}
       MAVEN_PASSPHRASE: ${{ secrets.maven-pass }}
       MAVEN_KEY: ${{ secrets.maven-key }}
+      OSSR_USERNAME: ${{ secrets.ossr-username }}
+      OSSR_PASSWORD: ${{ secrets.ossr-token }}
     steps:
       - name: Display runner context
         run: hostname -s
@@ -85,8 +93,8 @@ jobs:
           distribution: 'temurin' # See 'Supported distributions' for available options
           java-version: '11'
 
-      - name: Cache Build & Konan
-        uses: actions/cache@v3
+      - name: Restore Build and Konan
+        uses: actions/cache/restore@v3
         with:
           path: |
             ~/.konan
@@ -99,8 +107,8 @@ jobs:
       - name: Setup gradle
         uses: gradle/gradle-build-action@v2
 
-      - name: Build
-        run: ./gradlew build -x check --no-daemon --stacktrace
+      - name: Publish Mips to Maven Central Repository
+        run: ./gradlew publishLinuxMipsMavenCentral -x build --no-parallel --stacktrace
 
-      - name: Publish Mips to Snapshot Repository
-        run: ./gradlew -x build publishLinuxMipsSnapshot --no-parallel --stacktrace
+      - name: Publish Mips to Rolling Release Repository
+        run: ./gradlew publishLinuxMipsRelease -x build --no-parallel --stacktrace

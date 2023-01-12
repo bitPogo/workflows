@@ -41,6 +41,14 @@ jobs:
           distribution: 'temurin' # See 'Supported distributions' for available options
           java-version: '11'
 
+      - name: Restore Build and Konan
+        uses: actions/cache/restore@v3
+        with:
+          path: |
+            ~/.konan
+            **/build/**/*
+          key: linux-build
+
       - name: Validate Gradle Wrapper
         uses: gradle/wrapper-validation-action@v1
 

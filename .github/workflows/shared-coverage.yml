@@ -81,7 +81,7 @@ jobs:
           key: reports-${{ github.head_ref }}
           restore-keys: |
             reports-${{ github.head_ref }}
-            jvm-gradle
+            linux-build
 
       - name: Coverage Android
         if: inputs.android == true
