@@ -62,7 +62,8 @@ jobs:
         with:
           path: |
             ~/.konan
-            **/build/**/*
+            ~/build
+            ~/**/build
           key: macos-build
 
       - name: Publish to Maven Central
@@ -107,7 +108,8 @@ jobs:
         with:
           path: |
             ~/.konan
-            **/build/**/*
+            ~/build
+            ~/**/build
           key: macos-build
 
       - name: Publish to Maven Central
@@ -148,7 +150,8 @@ jobs:
         with:
           path: |
             ~/.konan
-            **/build/**/*
+            ~/build
+            ~/**/build
           key: linux-build
 
       - name: Validate Gradle Wrapper

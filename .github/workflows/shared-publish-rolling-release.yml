@@ -56,7 +56,8 @@ jobs:
         with:
           path: |
             ~/.konan
-            **/build/**/*
+            ~/build
+            ~/**/build
           key: macos-build
 
       - name: Publish to Rolling Release Repository
@@ -96,7 +97,8 @@ jobs:
         with:
           path: |
             ~/.konan
-            **/build/**/*
+            ~/build
+            ~/**/build
           key: macos-build
 
       - name: Publish to Rolling Release Repository
@@ -132,7 +134,8 @@ jobs:
         with:
           path: |
             ~/.konan
-            **/build/**/*
+            ~/build
+            ~/**/build
           key: linux-build
 
       - name: Validate Gradle Wrapper
