@@ -63,7 +63,7 @@ jobs:
           path: |
             ~/.konan
             **/build/**/*
-          key: mac-build
+          key: macos-build
 
       - name: Publish to Maven Central
         run: ./gradlew publishMavenCentralSnapshot -x build --stacktrace --no-parallel
@@ -109,7 +109,7 @@ jobs:
           path: |
             ~/.konan
             **/build/**/*
-          key: mac-build
+          key: macos-build
 
       - name: Publish to Maven Central
         run: ./gradlew publishMavenCentralSnapshot -x build --stacktrace --no-parallel

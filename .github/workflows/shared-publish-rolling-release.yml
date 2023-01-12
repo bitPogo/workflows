@@ -57,7 +57,7 @@ jobs:
           path: |
             ~/.konan
             **/build/**/*
-          key: mac-build
+          key: macos-build
 
       - name: Publish to Rolling Release Repository
         run: ./gradlew publishRollingRelease -x build --no-parallel
@@ -97,7 +97,7 @@ jobs:
           path: |
             ~/.konan
             **/build/**/*
-          key: mac-build
+          key: macos-build
 
       - name: Publish to Rolling Release Repository
         run: ./gradlew publishRollingRelease -x build --no-parallel
