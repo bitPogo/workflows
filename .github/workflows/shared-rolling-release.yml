@@ -107,4 +107,4 @@ jobs:
         run: ./gradlew build -x check --no-daemon --stacktrace
 
       - name: Publish Mips to Rolling Release Repository
-        run: ./gradlew -x build publishLinuxMips32PublicationToRollingReleaseRepository publishLinuxMipsel32PublicationToRollingReleaseRepository --no-parallel
+        run: ./gradlew -x build publishLinuxMipsToRollingRelease --no-parallel --stacktrace

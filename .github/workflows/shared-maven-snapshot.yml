@@ -117,8 +117,8 @@ jobs:
       - name: Build
         run: ./gradlew build -x check --no-daemon --stacktrace
 
-      - name: Publish to Rolling Release Repository
-        run: ./gradlew publishLinuxMips32PublicationToMavenCentralSnapshotRepository publishLinuxMipsel32PublicationToMavenCentralSnapshotRepository -x build --stacktrace --no-parallel
+      - name: Publish Mips to Maven Central Snapshot Repository
+        run: ./gradlew publishLinuxMipsToMavenCentralSnapshot -x build --no-parallel --stacktrace
 
       - name: Publish Mips to Snapshot Repository
-        run: ./gradlew -x build publishLinuxMips32PublicationToSnapshotRepository publishLinuxMipsel32PublicationToSnapshotRepository --no-parallel
+        run: ./gradlew -x build publishLinuxMipsToSnapshot --no-parallel --stacktrace
