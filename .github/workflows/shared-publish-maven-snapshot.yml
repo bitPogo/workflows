@@ -145,6 +145,12 @@ jobs:
           distribution: 'temurin' # See 'Supported distributions' for available options
           java-version: '11'
 
+      - name: Validate Gradle Wrapper
+        uses: gradle/wrapper-validation-action@v1
+
+      - name: Setup gradle
+        uses: gradle/gradle-build-action@v2
+
       - name: Restore Build and Konan
         uses: actions/cache/restore@v3
         with:
@@ -153,12 +159,6 @@ jobs:
             ~/build
             ~/**/build
           key: linux-build
-
-      - name: Validate Gradle Wrapper
-        uses: gradle/wrapper-validation-action@v1
-
-      - name: Setup gradle
-        uses: gradle/gradle-build-action@v2
 
       - name: Publish Mips to Maven Central Snapshot Repository
         run: ./gradlew publishLinuxMipsMavenCentralSnapshot -x build --no-parallel --stacktrace
