@@ -33,8 +33,8 @@ jobs:
         with:
           path: |
             ~/.konan
-            ~/build
-            ~/**/build
+            ./build
+            ./**/build
           key: linux-build
 
       - name: Build
@@ -45,6 +45,6 @@ jobs:
         with:
           path: |
             ~/.konan
-            ~/build
-            ~/**/build
+            ./build
+            ./**/build
           key: macos-build

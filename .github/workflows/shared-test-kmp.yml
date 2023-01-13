@@ -51,8 +51,8 @@ jobs:
         with:
           path: |
             ~/.konan
-            ~/build
-            ~/**/build
+            ./build
+            ./**/build
           key: ${{ matrix.config.cacheKey }}
 
       - name: Validate Gradle Wrapper
