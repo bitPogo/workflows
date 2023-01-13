@@ -62,8 +62,8 @@ jobs:
         with:
           path: |
             ~/.konan
-            ./build
-            ./**/build
+            ~/build
+            ~/**/build
           key: macos-build
 
       - name: Publish to Maven Central
@@ -109,8 +109,8 @@ jobs:
         with:
           path: |
             ~/.konan
-            ./build
-            ./**/build
+            ~/build
+            ~/**/build
           key: macos-build
 
       - name: Publish to Maven Central
@@ -156,8 +156,8 @@ jobs:
         with:
           path: |
             ~/.konan
-            ./build
-            ./**/build
+            ~/build
+            ~/**/build
           key: linux-build
 
       - name: Publish Mips to Maven Central Snapshot Repository

@@ -52,8 +52,8 @@ jobs:
         with:
           path: |
             ~/.konan
-            ./build
-            ./**/build
+            ~/build
+            ~/**/build
           key: linux-build
 
       - name: Cleanup
