@@ -6,6 +6,10 @@ on:
       platforms:
         required: true
         type: string
+      cleanup:
+        required: false
+        type: boolean
+        default: true
 
 
 concurrency:
@@ -63,6 +67,10 @@ jobs:
       - name: Setup gradle
         if: contains(fromJson(inputs.platforms), matrix.config.target)
         uses: gradle/gradle-build-action@v2
+
+      - name: Cleanup
+        if: contains(fromJson(inputs.platforms), matrix.config.target) && inputs.cleanup == true
+        run: ./gradlew clean
 
       - name: Test ${{ matrix.config.target }} targets
         if: contains(fromJson(inputs.platforms), matrix.config.target)
