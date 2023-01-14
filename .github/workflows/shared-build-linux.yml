@@ -7,6 +7,10 @@ on:
         required: false
         type: boolean
         default: false
+      build-cache-dir:
+        required: false
+        type: string
+        default: '**/build-cache'
 
 jobs:
   build-linux:
@@ -37,6 +41,8 @@ jobs:
       - name: Setup gradle
         if: inputs.cache-write-only == false
         uses: gradle/gradle-build-action@v2
+        with:
+          gradle-home-cache-includes: ${{ inputs.build-cache-dir }}
 
       - name: Setup gradle (write only)
         if: inputs.cache-write-only == true
@@ -44,6 +50,7 @@ jobs:
         with:
           cache-read-only: false
           cache-write-only: true
+          gradle-home-cache-includes: ${{ inputs.build-cache-dir }}
 
       - name: Cache Konan
         uses: actions/cache@v3

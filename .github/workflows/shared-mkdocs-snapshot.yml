@@ -2,6 +2,12 @@ name: Antibytes CI - Snapshot
 
 on:
   workflow_call:
+    inputs:
+      build-cache-dir:
+        required: false
+        type: string
+        default: '**/build-cache'
+    
     secrets:
       github-token:
         required: true
@@ -34,6 +40,7 @@ jobs:
       - name: Setup gradle
         uses: gradle/gradle-build-action@v2
         with:
+          gradle-home-cache-includes: ${{ inputs.build-cache-dir }}
           cache-read-only: true
 
       - name: Prepare Python

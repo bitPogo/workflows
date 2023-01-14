@@ -31,6 +31,11 @@ on:
         required: false
         type: boolean
         default: true
+      build-cache-dir:
+        required: false
+        type: string
+        default: '**/build-cache/**/*'
+        
     secrets:
       github-token:
         required: false
@@ -71,6 +76,7 @@ jobs:
       - name: Setup gradle
         uses: gradle/gradle-build-action@v2
         with:
+          gradle-home-cache-includes: ${{ inputs.build-cache-dir }}
           cache-read-only: true
 
       - name: Cache Reports

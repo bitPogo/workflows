@@ -11,6 +11,11 @@ on:
         required: false
         type: boolean
         default: true
+      build-cache-dir:
+        required: false
+        type: string
+        default: '**/build-cache'  
+      
     secrets:
       upload-username:
         required: true
@@ -55,7 +60,7 @@ jobs:
       - name: Setup gradle
         uses: gradle/gradle-build-action@v2
         with:
-          gradle-home-cache-cleanup: true
+          gradle-home-cache-includes: ${{ inputs.build-cache-dir }}
           cache-read-only: true
 
       - name: Cache Konan
@@ -103,7 +108,7 @@ jobs:
       - name: Setup gradle
         uses: gradle/gradle-build-action@v2
         with:
-          gradle-home-cache-cleanup: true
+          gradle-home-cache-includes: ${{ inputs.build-cache-dir }}
           cache-read-only: true
 
       - name: Cache Konan
@@ -153,8 +158,8 @@ jobs:
       - name: Setup gradle
         uses: gradle/gradle-build-action@v2
         with:
+          gradle-home-cache-includes: ${{ inputs.build-cache-dir }}
           cache-read-only: true
-          gradle-home-cache-cleanup: true
 
       - name: Cache Konan
         uses: actions/cache@v3
