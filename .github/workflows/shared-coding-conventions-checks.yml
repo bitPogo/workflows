@@ -63,9 +63,6 @@ jobs:
             **/reports/jacoco/**/*.xml
             **/test-results/**/*
           key: reports-${{ github.head_ref }}
-          restore-keys: |
-            reports-${{ github.head_ref }}
-            linux-build
 
       - name: Lint
         if: inputs.spotelss == true
