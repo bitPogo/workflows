@@ -58,7 +58,7 @@ jobs:
         uses: actions/cache@v3
         with:
           path: ~/.konan
-          key: konan-${{ hashFiles('*.gradle.kts') }}
+          key: ${{ runner.os }}-konan-${{ hashFiles('*.gradle.kts') }}
 
       - name: Publish to Rolling Release Repository
         run: ./gradlew publishRollingRelease -x build --no-parallel
@@ -99,7 +99,7 @@ jobs:
         uses: actions/cache@v3
         with:
           path: ~/.konan
-          key: konan-${{ hashFiles('*.gradle.kts') }}
+          key: ${{ runner.os }}-konan-${{ hashFiles('*.gradle.kts') }}
 
       - name: Publish to Rolling Release Repository
         run: ./gradlew publishRollingRelease -x build --no-parallel
@@ -142,7 +142,7 @@ jobs:
         uses: actions/cache@v3
         with:
           path: ~/.konan
-          key: konan-${{ hashFiles('*.gradle.kts') }}
+          key: ${{ runner.os }}-konan-${{ hashFiles('*.gradle.kts') }}
 
       - name: Publish Mips to Rolling Release Repository
         run: ./gradlew publishLinuxMipsRollingRelease -x build --no-parallel --stacktrace

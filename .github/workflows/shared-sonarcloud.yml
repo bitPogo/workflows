@@ -52,7 +52,7 @@ jobs:
         uses: actions/cache@v3
         with:
           path: ~/.konan
-          key: konan-${{ hashFiles('*.gradle.kts') }}
+          key: ${{ runner.os }}-konan-${{ hashFiles('*.gradle.kts') }}
 
       - name: Setup gradle
         uses: gradle/gradle-build-action@v2

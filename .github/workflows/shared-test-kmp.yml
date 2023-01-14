@@ -54,7 +54,7 @@ jobs:
         with:
           path: |
             ~/.konan
-          key: konan-${{ hashFiles('*.gradle.kts') }}
+          key: ${{ runner.os }}-konan-${{ hashFiles('*.gradle.kts') }}
 
       - name: Validate Gradle Wrapper
         if: contains(fromJson(inputs.platforms), matrix.config.target)

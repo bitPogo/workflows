@@ -59,7 +59,7 @@ jobs:
         uses: actions/cache@v3
         with:
           path: ~/.konan
-          key: konan-${{ hashFiles('*.gradle.kts') }}
+          key: ${{ runner.os }}-konan-${{ hashFiles('*.gradle.kts') }}
 
       - name: Publish to Development Repository
         run: ./gradlew publishDevelopment -x build --no-parallel
@@ -101,7 +101,7 @@ jobs:
         uses: actions/cache@v3
         with:
           path: ~/.konan
-          key: konan-${{ hashFiles('*.gradle.kts') }}
+          key: ${{ runner.os }}-konan-${{ hashFiles('*.gradle.kts') }}
 
       - name: Publish to Development Repository
         run: ./gradlew publishDevelopment -x build --no-parallel
@@ -145,7 +145,7 @@ jobs:
         uses: actions/cache@v3
         with:
           path: ~/.konan
-          key: konan-${{ hashFiles('*.gradle.kts') }}
+          key: ${{ runner.os }}-konan-${{ hashFiles('*.gradle.kts') }}
 
       - name: Publish Mips to Development Repository
         run: ./gradlew publishLinuxMipsDevelopment -x build --no-parallel --stacktrace
