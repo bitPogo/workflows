@@ -25,6 +25,9 @@ jobs:
 
     runs-on: ubuntu-latest
 
+    env:
+      GITHUB: true
+
     name: Check ${{ matrix.project }}
     steps:
       - name: Display runner context
@@ -47,14 +50,11 @@ jobs:
       - name: Setup gradle
         uses: gradle/gradle-build-action@v2
 
-      - name: Restore Build and Konan
-        uses: actions/cache/restore@v3
+      - name: Cache Konan
+        uses: actions/cache@v3
         with:
-          path: |
-            ~/.konan
-            ~/build
-            ~/**/build
-          key: linux-build
+          path: ~/.konan
+          key: konan-${{ hashFiles('*.gradle.kts') }}
 
       - name: Cleanup
         if: inputs.cleanup == true

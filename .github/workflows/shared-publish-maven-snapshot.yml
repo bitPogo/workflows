@@ -1,4 +1,4 @@
-name: Antibytes CI - Release
+name: Antibytes CI - Publish Maven Snapshot
 
 on:
   workflow_call:
@@ -29,13 +29,16 @@ jobs:
   snapshot:
     if: inputs.use-linux-only == false
     runs-on: macos-latest
+
     env:
+      GITHUB: true
       PACKAGE_REGISTRY_UPLOAD_USERNAME: ${{ secrets.upload-username }}
       PACKAGE_REGISTRY_UPLOAD_TOKEN: ${{ secrets.upload-token }}
       MAVEN_PASSPHRASE: ${{ secrets.maven-pass }}
       MAVEN_KEY: ${{ secrets.maven-key }}
       OSSR_USERNAME: ${{ secrets.ossr-username }}
       OSSR_PASSWORD: ${{ secrets.ossr-token }}
+
     steps:
       - name: Display runner context
         run: hostname -s
@@ -57,14 +60,11 @@ jobs:
       - name: Setup gradle
         uses: gradle/gradle-build-action@v2
 
-      - name: Restore Build and Konan
-        uses: actions/cache/restore@v3
+      - name: Cache Konan
+        uses: actions/cache@v3
         with:
-          path: |
-            ~/.konan
-            ~/build
-            ~/**/build
-          key: macos-build
+          path: ~/.konan
+          key: konan-${{ hashFiles('*.gradle.kts') }}
 
       - name: Publish to Maven Central
         run: ./gradlew publishMavenCentralSnapshot -x build --stacktrace --no-parallel
@@ -76,13 +76,16 @@ jobs:
   snapshot-linux-only:
     if: inputs.use-linux-only == true
     runs-on: ubuntu-latest
+
     env:
+      GITHUB: true
       PACKAGE_REGISTRY_UPLOAD_USERNAME: ${{ secrets.upload-username }}
       PACKAGE_REGISTRY_UPLOAD_TOKEN: ${{ secrets.upload-token }}
       MAVEN_PASSPHRASE: ${{ secrets.maven-pass }}
       MAVEN_KEY: ${{ secrets.maven-key }}
       OSSR_USERNAME: ${{ secrets.ossr-username }}
       OSSR_PASSWORD: ${{ secrets.ossr-token }}
+
     steps:
       - name: Display runner context
         run: hostname -s
@@ -104,14 +107,11 @@ jobs:
       - name: Setup gradle
         uses: gradle/gradle-build-action@v2
 
-      - name: Restore Build and Konan
-        uses: actions/cache/restore@v3
+      - name: Cache Konan
+        uses: actions/cache@v3
         with:
-          path: |
-            ~/.konan
-            ~/build
-            ~/**/build
-          key: macos-build
+          path: ~/.konan
+          key: konan-${{ hashFiles('*.gradle.kts') }}
 
       - name: Publish to Maven Central
         run: ./gradlew publishMavenCentralSnapshot -x build --stacktrace --no-parallel
@@ -123,13 +123,16 @@ jobs:
     if: inputs.uses-mips == true && inputs.use-linux-only == false
     runs-on: ubuntu-latest
     needs: snapshot
+
     env:
+      GITHUB: true
       PACKAGE_REGISTRY_UPLOAD_USERNAME: ${{ secrets.upload-username }}
       PACKAGE_REGISTRY_UPLOAD_TOKEN: ${{ secrets.upload-token }}
       MAVEN_PASSPHRASE: ${{ secrets.maven-pass }}
       MAVEN_KEY: ${{ secrets.maven-key }}
       OSSR_USERNAME: ${{ secrets.ossr-username }}
       OSSR_PASSWORD: ${{ secrets.ossr-token }}
+
     steps:
       - name: Display runner context
         run: hostname -s
@@ -151,14 +154,11 @@ jobs:
       - name: Setup gradle
         uses: gradle/gradle-build-action@v2
 
-      - name: Restore Build and Konan
-        uses: actions/cache/restore@v3
+      - name: Cache Konan
+        uses: actions/cache@v3
         with:
-          path: |
-            ~/.konan
-            ~/build
-            ~/**/build
-          key: linux-build
+          path: ~/.konan
+          key: konan-${{ hashFiles('*.gradle.kts') }}
 
       - name: Publish Mips to Maven Central Snapshot Repository
         run: ./gradlew publishLinuxMipsMavenCentralSnapshot -x build --no-parallel --stacktrace

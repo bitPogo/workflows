@@ -29,6 +29,9 @@ jobs:
   conventions:
     runs-on: ubuntu-latest
 
+    env:
+      GITHUB: true
+
     name: Code Conventions
     steps:
       - name: Display runner context

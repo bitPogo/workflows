@@ -26,6 +26,7 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
+      GITHUB: true
       useSonar: ${{ secrets.sonar-token != '' }}
 
     name: Code Coverage
@@ -47,6 +48,12 @@ jobs:
       - name: Validate Gradle Wrapper
         uses: gradle/wrapper-validation-action@v1
 
+      - name: Cache Konan
+        uses: actions/cache@v3
+        with:
+          path: ~/.konan
+          key: konan-${{ hashFiles('*.gradle.kts') }}
+
       - name: Setup gradle
         uses: gradle/gradle-build-action@v2
 
@@ -58,9 +65,6 @@ jobs:
             **/reports/jacoco/**/*.xml
             **/test-results/**/*
           key: reports-${{ github.head_ref }}
-          restore-keys: |
-            reports-${{ github.head_ref }}
-            linux-build
 
       - name: Sonarcloud
         env:

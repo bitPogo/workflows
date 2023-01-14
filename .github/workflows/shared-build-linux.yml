@@ -6,6 +6,10 @@ on:
 jobs:
   build-linux:
     runs-on: ubuntu-latest
+
+    env:
+      GITHUB: true
+
     steps:
       - name: Display runner context
         run: hostname -s
@@ -28,14 +32,11 @@ jobs:
       - name: Setup gradle
         uses: gradle/gradle-build-action@v2
 
+      - name: Cache Konan
+        uses: actions/cache@v3
+        with:
+          path: ~/.konan
+          key: konan-${{ hashFiles('*.gradle.kts') }}
+
       - name: Build
         run: ./gradlew build -x check --no-daemon --stacktrace
-
-      - name: Cache Build and Konan
-        uses: actions/cache/save@v3
-        with:
-          path: |
-            ~/.konan
-            ~/build
-            ~/**/build
-          key: linux-build

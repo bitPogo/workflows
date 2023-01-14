@@ -10,6 +10,9 @@ jobs:
   snapshot-docs:
     runs-on: ubuntu-latest
 
+    env:
+      GITHUB: true
+
     steps:
       - name: Display runner context
         run: hostname -s

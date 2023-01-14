@@ -30,6 +30,9 @@ jobs:
         ]
     runs-on: ${{ matrix.config.os }}
 
+    env:
+      GITHUB: true
+
     name: Check ${{ matrix.config.target }}
     steps:
       - name: Checkout Repo
@@ -45,15 +48,13 @@ jobs:
           distribution: 'temurin' # See 'Supported distributions' for available options
           java-version: '11'
 
-      - name: Restore Build and Konan
+      - name: Cache Konan
         if: contains(fromJson(inputs.platforms), matrix.config.target)
-        uses: actions/cache/restore@v3
+        uses: actions/cache@v3
         with:
           path: |
             ~/.konan
-            ~/build
-            ~/**/build
-          key: ${{ matrix.config.cacheKey }}
+          key: konan-${{ hashFiles('*.gradle.kts') }}
 
       - name: Validate Gradle Wrapper
         if: contains(fromJson(inputs.platforms), matrix.config.target)

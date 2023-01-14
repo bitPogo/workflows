@@ -43,6 +43,10 @@ concurrency:
 jobs:
   check:
     runs-on: macos-latest
+
+    env:
+      GITHUB: true
+
     strategy:
       matrix:
         project: fromJson(inputs.projects)
@@ -75,14 +79,11 @@ jobs:
         if: inputs.cleanup == true
         run: ./gradlew clean
 
-      - name: Restore Build and Konan
-        uses: actions/cache/restore@v3
+      - name: Cache Konan
+        uses: actions/cache@v3
         with:
-          path: |
-            ~/.konan
-            ~/build
-            ~/**/build
-          key: linux-build
+          path: ~/.konan
+          key: konan-${{ hashFiles('*.gradle.kts') }}
         
       - name: AVD cache
         uses: actions/cache@v3

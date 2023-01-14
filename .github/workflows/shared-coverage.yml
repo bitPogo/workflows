@@ -46,6 +46,7 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
+      GITHUB: true
       useSonar: ${{ secrets.sonar-token != '' }}
 
     name: Code Coverage
