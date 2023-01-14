@@ -66,11 +66,14 @@ jobs:
           path: ~/.konan
           key: ${{ runner.os }}-konan-${{ hashFiles('*.gradle.kts') }}
 
+      - name: Build
+        run: ./gradlew clean build -x check --no-daemon --stacktrace
+
       - name: Publish to Maven Central
-        run: ./gradlew publishMavenCentralSnapshot -x check --stacktrace --no-parallel
+        run: ./gradlew publishMavenCentralSnapshot --stacktrace --no-parallel
 
       - name: Publish to Snapshot Repository
-        run: ./gradlew publishSnapshot -x check --no-parallel
+        run: ./gradlew publishSnapshot --no-parallel
 
 
   snapshot-linux-only:
@@ -113,11 +116,14 @@ jobs:
           path: ~/.konan
           key: ${{ runner.os }}-konan-${{ hashFiles('*.gradle.kts') }}
 
+      - name: Build
+        run: ./gradlew clean build -x check --no-daemon --stacktrace
+
       - name: Publish to Maven Central
-        run: ./gradlew publishMavenCentralSnapshot -x check --stacktrace --no-parallel
+        run: ./gradlew publishMavenCentralSnapshot --stacktrace --no-parallel
 
       - name: Publish to Snapshot Repository
-        run: ./gradlew publishSnapshot -x check --no-parallel
+        run: ./gradlew publishSnapshot --no-parallel
 
   snapshot-mips:
     if: inputs.uses-mips == true && inputs.use-linux-only == false
@@ -160,8 +166,11 @@ jobs:
           path: ~/.konan
           key: ${{ runner.os }}-konan-${{ hashFiles('*.gradle.kts') }}
 
+      - name: Build
+        run: ./gradlew clean build -x check --no-daemon --stacktrace
+
       - name: Publish Mips to Maven Central Snapshot Repository
-        run: ./gradlew publishLinuxMipsMavenCentralSnapshot -x check --no-parallel --stacktrace
+        run: ./gradlew publishLinuxMipsMavenCentralSnapshot --no-parallel --stacktrace
 
       - name: Publish Mips to Snapshot Repository
-        run: ./gradlew publishLinuxMipsSnapshot -x check --no-parallel --stacktrace
+        run: ./gradlew publishLinuxMipsSnapshot --no-parallel --stacktrace

@@ -61,8 +61,11 @@ jobs:
           path: ~/.konan
           key: ${{ runner.os }}-konan-${{ hashFiles('*.gradle.kts') }}
 
+      - name: Build
+        run: ./gradlew clean build -x check --no-daemon --stacktrace
+
       - name: Publish to Development Repository
-        run: ./gradlew publishDevelopment -x check --no-parallel
+        run: ./gradlew publishDevelopment --no-parallel
 
   publish-pull-request-linux-only:
     if: inputs.use-linux-only == true
@@ -103,8 +106,11 @@ jobs:
           path: ~/.konan
           key: ${{ runner.os }}-konan-${{ hashFiles('*.gradle.kts') }}
 
+      - name: Build
+        run: ./gradlew clean build -x check --no-daemon --stacktrace
+
       - name: Publish to Development Repository
-        run: ./gradlew publishDevelopment -x check --no-parallel
+        run: ./gradlew publishDevelopment --no-parallel
 
 
   publish-pull-request-mips:
@@ -147,5 +153,8 @@ jobs:
           path: ~/.konan
           key: ${{ runner.os }}-konan-${{ hashFiles('*.gradle.kts') }}
 
+      - name: Build
+        run: ./gradlew clean build -x check --no-daemon --stacktrace
+
       - name: Publish Mips to Development Repository
-        run: ./gradlew publishLinuxMipsDevelopment -x check --no-parallel --stacktrace
+        run: ./gradlew publishLinuxMipsDevelopment --no-parallel --stacktrace
