@@ -2,6 +2,11 @@ name: Antibytes CI - Build on MacOs
 
 on:
   workflow_call:
+    inputs:
+      cache-write-only:
+        required: false
+        type: boolean
+        default: false
 
 jobs:
   build-mac:
@@ -30,6 +35,11 @@ jobs:
         uses: gradle/wrapper-validation-action@v1
 
       - name: Setup gradle
+        if: inputs.cache-write-only == false
+        uses: gradle/gradle-build-action@v2
+
+      - name: Setup gradle (write only)
+        if: inputs.cache-write-only == true
         uses: gradle/gradle-build-action@v2
         with:
           cache-read-only: false
