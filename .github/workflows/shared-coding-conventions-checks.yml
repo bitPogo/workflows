@@ -3,7 +3,7 @@ name: Run Code Conventions
 on:
   workflow_call:
     inputs:
-      spotelss:
+      spotless:
         required: false
         type: boolean
         default: true
@@ -53,10 +53,12 @@ jobs:
 
       - name: Setup gradle
         uses: gradle/gradle-build-action@v2
+        with:
+          cache-read-only: true
 
       - name: Cache Reports
         if: inputs.cache-results == true
-        uses: actions/cache@v3
+        uses: actions/cache/save@v3
         with:
           path: |
             **/reports/detekt/detekt.xml

@@ -54,6 +54,9 @@ jobs:
 
       - name: Setup gradle
         uses: gradle/gradle-build-action@v2
+        with:
+          gradle-home-cache-cleanup: true
+          cache-read-only: true
 
       - name: Cache Konan
         uses: actions/cache@v3
@@ -61,8 +64,8 @@ jobs:
           path: ~/.konan
           key: ${{ runner.os }}-konan-${{ hashFiles('*.gradle.kts') }}
 
-      - name: Build
-        run: ./gradlew clean build -x check --no-daemon --stacktrace
+      - name: Build # Ensure Build
+        run: ./gradlew build -x check --no-daemon --stacktrace
 
       - name: Publish to Development Repository
         run: ./gradlew publishDevelopment --no-parallel
@@ -99,6 +102,9 @@ jobs:
 
       - name: Setup gradle
         uses: gradle/gradle-build-action@v2
+        with:
+          gradle-home-cache-cleanup: true
+          cache-read-only: true
 
       - name: Cache Konan
         uses: actions/cache@v3
@@ -106,8 +112,8 @@ jobs:
           path: ~/.konan
           key: ${{ runner.os }}-konan-${{ hashFiles('*.gradle.kts') }}
 
-      - name: Build
-        run: ./gradlew clean build -x check --no-daemon --stacktrace
+      - name: Build # Ensure Build
+        run: ./gradlew build -x check --no-daemon --stacktrace
 
       - name: Publish to Development Repository
         run: ./gradlew publishDevelopment --no-parallel
@@ -146,6 +152,9 @@ jobs:
 
       - name: Setup gradle
         uses: gradle/gradle-build-action@v2
+        with:
+          cache-read-only: true
+          gradle-home-cache-cleanup: true
 
       - name: Cache Konan
         uses: actions/cache@v3
@@ -153,8 +162,8 @@ jobs:
           path: ~/.konan
           key: ${{ runner.os }}-konan-${{ hashFiles('*.gradle.kts') }}
 
-      - name: Build
-        run: ./gradlew clean build -x check --no-daemon --stacktrace
+      - name: Build # Ensure Build
+        run: ./gradlew build -x check --no-daemon --stacktrace
 
       - name: Publish Mips to Development Repository
         run: ./gradlew publishLinuxMipsDevelopment --no-parallel --stacktrace

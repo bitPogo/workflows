@@ -1,4 +1,4 @@
-name: Run Checks
+name: Run Checks (Linux)
 
 on:
   workflow_call:
@@ -42,7 +42,7 @@ concurrency:
 
 jobs:
   check:
-    runs-on: macos-latest
+    runs-on: ubuntu-latest
 
     env:
       GITHUB: true

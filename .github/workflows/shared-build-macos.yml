@@ -31,6 +31,8 @@ jobs:
 
       - name: Setup gradle
         uses: gradle/gradle-build-action@v2
+        with:
+          cache-write-only: true
 
       - name: Cache Konan
         uses: actions/cache@v3
@@ -38,5 +40,5 @@ jobs:
           path: ~/.konan
           key: ${{ runner.os }}-konan-${{ hashFiles('*.gradle.kts') }}
 
-      - name: Build
-        run: ./gradlew clean build -x check --no-daemon --stacktrace
+      - name: Build # Ensure Build
+        run: ./gradlew build -x check --no-daemon --stacktrace

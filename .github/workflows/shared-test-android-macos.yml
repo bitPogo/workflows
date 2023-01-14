@@ -1,0 +1,140 @@
+name: Run Checks (MacOs)
+
+on:
+  workflow_call:
+    inputs:
+      cleanup:
+        required: false
+        type: boolean
+        default: true
+      projects:
+        required: false
+        type: string
+        default: "[':app-android']"
+      api-level:
+        required: false
+        type: string
+        default: "['29']"
+      target:
+        required: false
+        type: string
+        default: "['default']"
+      arch:
+        required: false
+        type: string
+        default: "['x86']"
+      device:
+        required: false
+        type: string
+        default: 'Nexus 6'
+      emulator-options:
+        required: false
+        type: string
+        default: '-no-window -gpu swiftshader_indirect -no-snapshot -noaudio -no-boot-anim'
+      disable-animations:
+        required: false
+        type: boolean
+        default: true
+
+concurrency:
+  group: validation-${{ github.head_ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    runs-on: macos-latest
+
+    env:
+      GITHUB: true
+
+    strategy:
+      matrix:
+        project: fromJson(inputs.projects)
+        api-level: fromJson(inputs.level)
+        target: fromJson(inputs.target)
+        arch: fromJson(inputs.arch)
+        device: fromJson(inputs.device)
+
+
+    name: Check ${{ matrix.project }} ${{ matrix.api-level }} ${{ matrix.target }} ${{ matrix.arch }} ${{ matrix.device }}
+    steps:
+      - name: Display runner context
+        run: hostname -s
+
+      - name: Checkout Repo
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Setup Java
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin' # See 'Supported distributions' for available options
+          java-version: '11'
+
+      - name: Validate Gradle Wrapper
+        uses: gradle/wrapper-validation-action@v1
+
+      - name: Setup gradle
+        uses: gradle/gradle-build-action@v2
+        with:
+          cache-read-only: true
+
+      - name: Cleanup
+        if: inputs.cleanup == true
+        run: ./gradlew clean
+
+      - name: Cache Konan
+        uses: actions/cache@v3
+        with:
+          path: ~/.konan
+          key: ${{ runner.os }}-konan-${{ hashFiles('*.gradle.kts') }}
+        
+      - name: AVD cache
+        uses: actions/cache@v3
+        id: avd-cache
+        with:
+          path: |
+            ~/.android/avd/*
+            ~/.android/adb*
+          key: avd-${{ matrix.api-level }}
+
+      - name: Ensure active AVD
+        if: steps.avd-cache.outputs.cache-hit != 'true'
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: ${{ matrix.api-level }}
+          force-avd-creation: false
+          disable-animations: ${{ inputs.disable-animations }}
+          emulator-options: ${{ inputs.emulator-options }}
+          script: echo "Enable Cache."
+
+      - name: Run Instrumented Tests
+        if: endsWith(matrix.project, ':') == false
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: ${{ matrix.api-level }}
+          target: ${{ matrix.target }}
+          arch: ${{ matrix.arch }}
+          profile: ${{ matrix.device }}
+          disable-animations: ${{ inputs.disable-animations }}
+          emulator-options: ${{ inputs.emulator-options }}
+          script: ./gradlew ${{ matrix.project }}:connectedCheck
+
+      - name: Run Aggregated Instrumented Tests
+        if: endsWith(matrix.project, ':') == true
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: ${{ matrix.api-level }}
+          target: ${{ matrix.target }}
+          arch: ${{ matrix.arch }}
+          profile: ${{ matrix.device }}
+          disable-animations: ${{ inputs.disable-animations }}
+          emulator-options: ${{ inputs.emulator-options }}
+          script: ./gradlew connectedCheck
+
+      - name: Publish Test Report
+        if: failure()
+        uses: mikepenz/action-junit-report@v3
+        with:
+          report_paths: '**/build/test-results/**/TEST-*.xml'
