@@ -67,6 +67,8 @@ jobs:
       - name: Setup gradle
         if: contains(fromJson(inputs.platforms), matrix.config.target)
         uses: gradle/gradle-build-action@v2
+        with:
+          cache-read-only: true
 
       - name: Cleanup
         if: inputs.cleanup == true && contains(fromJson(inputs.platforms), matrix.config.target)

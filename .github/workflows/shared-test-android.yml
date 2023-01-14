@@ -75,6 +75,11 @@ jobs:
       - name: Validate Gradle Wrapper
         uses: gradle/wrapper-validation-action@v1
 
+      - name: Setup gradle
+        uses: gradle/gradle-build-action@v2
+        with:
+          cache-read-only: true
+
       - name: Cleanup
         if: inputs.cleanup == true
         run: ./gradlew clean
