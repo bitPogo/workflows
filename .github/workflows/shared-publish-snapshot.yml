@@ -14,7 +14,7 @@ on:
       build-cache-dir:
         required: false
         type: string
-        default: '**/build-cache'
+        default: '**/build-cache/**/*'
         
     secrets:
       upload-username:

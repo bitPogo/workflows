@@ -13,7 +13,7 @@ on:
       build-cache-dir:
         required: false
         type: string
-        default: '**/build-cache'
+        default: '**/build-cache/**/*'
 
 concurrency:
   group: validation-${{ github.workflow }}@${{ github.event.pull_request.head.label || github.head_ref || github.ref }}
