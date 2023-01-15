@@ -113,8 +113,14 @@ jobs:
         if: inputs.verifyKmp == true
         run: ./gradlew --no-daemon --stacktrace multiplatformCoverageVerification
 
+      - name: Publish Test Report
+        if: failure()
+        uses: mikepenz/action-junit-report@v3
+        with:
+          report_paths: '**/build/test-results/**/TEST-*.xml'
+
       - name: Sonarcloud
-        if: env.useSonar == true
+        if: env.useSonar == true && success()
         env:
           GITHUB_TOKEN: ${{ secrets.github-token }}
           SONAR_TOKEN: ${{ secrets.sonar-token }}
