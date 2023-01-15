@@ -72,7 +72,7 @@ jobs:
           key: reports-${{ github.head_ref }}
 
       - name: Lint
-        if: inputs.spotelss == true
+        if: inputs.spotless == true
         run: ./gradlew spotlessCheck
 
       - name: Static Analysis
