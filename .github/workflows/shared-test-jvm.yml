@@ -62,6 +62,9 @@ jobs:
         with:
           path: ~/.konan
           key: ${{ runner.os }}-konan-${{ hashFiles('*.gradle.kts') }}
+          restore-keys: |
+            ${{ runner.os }}-konan-${{ hashFiles('*.gradle.kts') }}
+            ${{ runner.os }}-konan-
 
       - name: Cleanup
         if: inputs.cleanup == true

@@ -94,6 +94,9 @@ jobs:
         with:
           path: ~/.konan
           key: ${{ runner.os }}-konan-${{ hashFiles('*.gradle.kts') }}
+          restore-keys: |
+            ${{ runner.os }}-konan-${{ hashFiles('*.gradle.kts') }}
+            ${{ runner.os }}-konan-
         
       - name: AVD cache
         uses: actions/cache@v3

@@ -73,6 +73,9 @@ jobs:
         with:
           path: ~/.konan
           key: ${{ runner.os }}-konan-${{ hashFiles('*.gradle.kts') }}
+          restore-keys: |
+            ${{ runner.os }}-konan-${{ hashFiles('*.gradle.kts') }}
+            ${{ runner.os }}-konan-
 
       - name: Build # Ensure Build
         run: ./gradlew build -x check --no-daemon --stacktrace
@@ -125,6 +128,9 @@ jobs:
         with:
           path: ~/.konan
           key: ${{ runner.os }}-konan-${{ hashFiles('*.gradle.kts') }}
+          restore-keys: |
+            ${{ runner.os }}-konan-${{ hashFiles('*.gradle.kts') }}
+            ${{ runner.os }}-konan-
 
       - name: Build # Ensure Build
         run: ./gradlew build -x check --no-daemon --stacktrace
@@ -179,6 +185,9 @@ jobs:
         with:
           path: ~/.konan
           key: ${{ runner.os }}-konan-${{ hashFiles('*.gradle.kts') }}
+          restore-keys: |
+            ${{ runner.os }}-konan-${{ hashFiles('*.gradle.kts') }}
+            ${{ runner.os }}-konan-
 
       - name: Build # Ensure Build
         run: ./gradlew build -x check --no-daemon --stacktrace
