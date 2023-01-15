@@ -27,6 +27,14 @@ on:
         required: false
         type: boolean
         default: false
+      custom:
+        required: false
+        type: string
+        default: ''
+      verifyCustom:
+        required: false
+        type: string
+        default: ''
       cache-results:
         required: false
         type: boolean
@@ -112,6 +120,14 @@ jobs:
       - name: Verification KMP
         if: inputs.verifyKmp == true
         run: ./gradlew --no-daemon --stacktrace multiplatformCoverageVerification
+
+      - name: Coverage Custom
+        if: inputs.custom != ''
+        run: ./gradlew --no-daemon --stacktrace join(fromJSON(inputs.custom), 'Coverage')
+
+      - name: Verification Custom
+        if: inputs.verifyCustom != ''
+        run: ./gradlew --no-daemon --stacktrace join(fromJSON(inputs.verifyCustom), 'CoverageVerification')
 
       - name: Publish Test Report
         if: failure()
