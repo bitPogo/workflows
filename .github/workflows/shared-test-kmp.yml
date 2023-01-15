@@ -9,7 +9,7 @@ on:
       cleanup:
         required: false
         type: boolean
-        default: true
+        default: false
       build-cache-dir:
         required: false
         type: string
@@ -24,16 +24,18 @@ jobs:
     strategy:
       matrix:
         config: [
-          { target: android, os: ubuntu-latest, tasks: testDebugUnitTest testReleaseUnitTest, continueOnError: false, cacheKey: linux-build },
-          { target: ios, os: macos-latest, tasks: iosX64Test iosSimulatorArm64Test, continueOnError: false, cachekey: macos-build },
-          { target: js, os: ubuntu-latest, tasks: jsTest, continueOnError: false, cacheKey: linux-build },
-          { target: jvm, os: ubuntu-latest, tasks: jvmTest, continueOnError: false, cacheKey: linux-build },
-          { target: linux, os: ubuntu-latest, tasks: linuxX64Test, continueOnError: false, cacheKey: linux-build },
-          { target: macos, os: macos-latest, tasks: macosX64Test macosArm64Test, continueOnError: false, cachekey: macos-build },
-          { target: mingw, os: windows-latest, tasks: mingwX64Test, continueOnError: false, cacheKey: win-build },
-          { target: tvos, os: macos-latest, tasks: tvosX64Test tvosSimulatorArm64Test, continueOnError: false, cachekey: macos-build },
-          { target: watchos, os: macos-latest, tasks: watchosX64Test watchosSimulatorArm64Test, continueOnError: false, cachekey: macos-build },
-          { target: watchosLegacy, os: macos-latest, tasks: watchosX64Test watchosX86Test watchosSimulatorArm64Test, continueOnError: false, cachekey: macos-build }, # Note X86 breaks
+          { target: android, os: ubuntu-latest, tasks: testDebugUnitTest testReleaseUnitTest, continueOnError: false },
+          { target: ios, os: macos-latest, tasks: iosX64Test iosSimulatorArm64Test, continueOnError: false },
+          { target: js, os: ubuntu-latest, tasks: jsTest, continueOnError: false },
+          { target: jvm, os: ubuntu-latest, tasks: jvmTest, continueOnError: false },
+          { target: linux-all, os: ubuntu-latest, tasks: linuxX64Test jsTest jvmTest testDebugUnitTest testReleaseUnitTest, continueOnError: false },
+          { target: linux, os: ubuntu-latest, tasks: linuxX64Test, continueOnError: false },
+          { target: apple, os: macos-latest, tasks: iosX64Test iosSimulatorArm64Test macosX64Test macosArm64Test tvosX64Test tvosSimulatorArm64Test  watchosX64Test watchosSimulatorArm64Test, continueOnError: false },
+          { target: macos, os: macos-latest, tasks: macosX64Test macosArm64Test, continueOnError: false },
+          { target: mingw, os: windows-latest, tasks: mingwX64Test, continueOnError: false },
+          { target: tvos, os: macos-latest, tasks: tvosX64Test tvosSimulatorArm64Test, continueOnError: false },
+          { target: watchos, os: macos-latest, tasks: watchosX64Test watchosSimulatorArm64Test, continueOnError: false },
+          { target: watchosLegacy, os: macos-latest, tasks: watchosX64Test watchosX86Test watchosSimulatorArm64Test, continueOnError: false }, # Note X86 breaks
         ]
     runs-on: ${{ matrix.config.os }}
 
