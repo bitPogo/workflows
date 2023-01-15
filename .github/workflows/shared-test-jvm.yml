@@ -30,7 +30,7 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      GITHUB: true
+      GITHUB: ${{ github.workspace }}
 
     name: Check ${{ matrix.project }}
     steps:

@@ -31,7 +31,7 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      GITHUB: true
+      GITHUB: ${{ github.workspace }}
       useSonar: ${{ secrets.sonar-token != '' }}
 
     name: Code Coverage

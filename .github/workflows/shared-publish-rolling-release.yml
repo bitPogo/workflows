@@ -32,7 +32,7 @@ jobs:
     runs-on: macos-latest
 
     env:
-      GITHUB: true
+      GITHUB: ${{ github.workspace }}
       PACKAGE_REGISTRY_UPLOAD_USERNAME: ${{ secrets.upload-username }}
       PACKAGE_REGISTRY_UPLOAD_TOKEN: ${{ secrets.upload-token }}
       MAVEN_PASSPHRASE: ${{ secrets.maven-pass }}
@@ -82,7 +82,7 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      GITHUB: true
+      GITHUB: ${{ github.workspace }}
       PACKAGE_REGISTRY_UPLOAD_USERNAME: ${{ secrets.upload-username }}
       PACKAGE_REGISTRY_UPLOAD_TOKEN: ${{ secrets.upload-token }}
       MAVEN_PASSPHRASE: ${{ secrets.maven-pass }}
@@ -134,7 +134,7 @@ jobs:
     needs: rolling-release
 
     env:
-      GITHUB: true
+      GITHUB: ${{ github.workspace }}
       PACKAGE_REGISTRY_UPLOAD_USERNAME: ${{ secrets.upload-username }}
       PACKAGE_REGISTRY_UPLOAD_TOKEN: ${{ secrets.upload-token }}
       MAVEN_PASSPHRASE: ${{ secrets.maven-pass }}

@@ -49,7 +49,7 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      GITHUB: true
+      GITHUB: ${{ github.workspace }}
 
     strategy:
       matrix:

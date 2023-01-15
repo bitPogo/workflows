@@ -17,7 +17,7 @@ jobs:
     runs-on: macos-latest
 
     env:
-      GITHUB: true
+      GITHUB: ${{ github.workspace }}
 
     steps:
       - name: Display runner context
