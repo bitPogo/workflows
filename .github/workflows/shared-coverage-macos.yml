@@ -7,7 +7,7 @@ on:
         required: false
         type: boolean
         default: false
-      verifyJvm:
+      verify-jvm:
         required: false
         type: boolean
         default: false
@@ -15,7 +15,7 @@ on:
         required: false
         type: boolean
         default: false
-      verifyKmp:
+      verify-kmp:
         required: false
         type: boolean
         default: false
@@ -23,7 +23,7 @@ on:
         required: false
         type: string
         default: ''
-      verifyCustom:
+      verify-custom:
         required: false
         type: string
         default: ''
@@ -81,7 +81,7 @@ jobs:
 
       - name: Restore Reports
         if: inputs.cache-results == true
-        uses: actions/cache/restrore@v3
+        uses: actions/cache/restore@v3
         with:
           path: |
             **/reports/detekt/detekt.xml
@@ -94,7 +94,7 @@ jobs:
         run: ./gradlew --no-daemon --stacktrace jvmCoverage
 
       - name: Verification Jvm
-        if: inputs.verifyJvm == true
+        if: inputs.verify-jvm == true
         run: ./gradlew --no-daemon --stacktrace jvmCoverageVerification
 
       - name: Coverage KMP
@@ -102,7 +102,7 @@ jobs:
         run: ./gradlew --no-daemon --stacktrace multiplatformCoverage
 
       - name: Verification KMP
-        if: inputs.verifyKmp == true
+        if: inputs.verify-kmp == true
         run: ./gradlew --no-daemon --stacktrace multiplatformCoverageVerification
 
       - name: Coverage Custom
@@ -110,8 +110,8 @@ jobs:
         run: ./gradlew --no-daemon --stacktrace join(fromJSON(inputs.custom), 'Coverage')
 
       - name: Verification Custom
-        if: inputs.verifyCustom != ''
-        run: ./gradlew --no-daemon --stacktrace join(fromJSON(inputs.verifyCustom), 'CoverageVerification')
+        if: inputs.verify-custom != ''
+        run: ./gradlew --no-daemon --stacktrace join(fromJSON(inputs.verify-custom), 'CoverageVerification')
 
       - name: Publish Test Report
         if: failure()
