@@ -133,8 +133,11 @@ jobs:
         if: steps.avd-cache.outputs.cache-hit != 'true'
         uses: reactivecircus/android-emulator-runner@v2
         with:
-          api-level: ${{ matrix.api-level }}
           force-avd-creation: false
+          api-level: ${{ matrix.api-level }}
+          target: ${{ matrix.target }}
+          arch: ${{ matrix.arch }}
+          profile: ${{ matrix.device }}
           disable-animations: ${{ inputs.disable-animations }}
           emulator-options: ${{ inputs.emulator-options }}
           script: echo "Enable Cache."
