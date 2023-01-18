@@ -1,0 +1,84 @@
+name: Run Code Conventions
+
+on:
+  workflow_call:
+    inputs:
+      spotless:
+        required: false
+        type: boolean
+        default: true
+      detekt:
+        required: false
+        type: boolean
+        default: true
+      api-check:
+        required: false
+        type: boolean
+        default: true
+      cache-results:
+        required: false
+        type: boolean
+        default: true
+      build-cache-dir:
+        required: false
+        type: string
+        default: '**/build-cache/**/*'
+
+
+concurrency:
+  group: conventions-${{ github.head_ref }}
+  cancel-in-progress: true
+
+jobs:
+  conventions:
+    runs-on: macos-latest
+
+    env:
+      GITHUB: ${{ github.workspace }}
+
+    name: Code Conventions
+    steps:
+      - name: Display runner context
+        run: hostname -s
+
+      - name: Checkout Repo
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Setup Java
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin' # See 'Supported distributions' for available options
+          java-version: '11'
+
+      - name: Validate Gradle Wrapper
+        uses: gradle/wrapper-validation-action@v1
+
+      - name: Setup gradle
+        uses: gradle/gradle-build-action@v2
+        with:
+          gradle-home-cache-includes: ${{ inputs.build-cache-dir }}
+          cache-read-only: true
+
+      - name: Cache Reports
+        if: inputs.cache-results == true
+        uses: actions/cache/save@v3
+        with:
+          path: |
+            **/reports/detekt/detekt.xml
+            **/reports/jacoco/**/*.xml
+            **/test-results/**/*
+          key: reports-${{ github.head_ref }}
+
+      - name: Lint
+        if: inputs.spotless == true
+        run: ./gradlew spotlessCheck
+
+      - name: Static Analysis
+        if: inputs.detekt == true
+        run: ./gradlew detekt
+
+      - name: Api check
+        if: inputs.api-check == true
+        run: ./gradlew apiCheck
