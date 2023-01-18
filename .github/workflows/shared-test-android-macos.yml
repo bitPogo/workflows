@@ -7,7 +7,7 @@ on:
         required: false
         type: boolean
         default: false
-      coverageVerification:
+      coverage-verification:
         required: false
         type: boolean
         default: false
@@ -121,7 +121,7 @@ jobs:
 
       - name: Cache Reports
         if: inputs.cache-results == true
-        uses: actions/cache/restore@v3
+        uses: actions/cache@v3
         with:
           path: |
             **/reports/detekt/detekt.xml
