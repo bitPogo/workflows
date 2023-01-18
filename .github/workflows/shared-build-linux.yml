@@ -62,12 +62,11 @@ jobs:
             ${{ runner.os }}-konan-${{ hashFiles('*.gradle.kts') }}
             ${{ runner.os }}-konan-
 
-      - name: Build # Ensure Build
-        run: ./gradlew build -x check --no-daemon --stacktrace
 
-      - name: Cache BuildCache
-        if: inputs.cache-write-only == true
-        uses: actions/cache/save@v3
+
+      - name: Cache and Restore BuildCache
+        if: inputs.cache-write-only == false
+        uses: actions/cache@v3
         with:
           path: ${{ inputs.build-cache-dir }}
           key: ${{ runner.os }}-build-${{ hashFiles('*.gradle.kts') }}
@@ -75,9 +74,12 @@ jobs:
             ${{ runner.os }}-build-${{ hashFiles('*.gradle.kts') }}
             ${{ runner.os }}-build-
 
+      - name: Build # Ensure Build
+        run: ./gradlew build -x check --no-daemon --stacktrace
+
       - name: Cache BuildCache
-        if: inputs.cache-write-only == false
-        uses: actions/cache@v3
+        if: inputs.cache-write-only == true
+        uses: actions/cache/save@v3
         with:
           path: ${{ inputs.build-cache-dir }}
           key: ${{ runner.os }}-build-${{ hashFiles('*.gradle.kts') }}
