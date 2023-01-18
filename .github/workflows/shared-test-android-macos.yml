@@ -11,6 +11,10 @@ on:
         required: false
         type: boolean
         default: false
+      cache-results:
+        required: false
+        type: boolean
+        default: false
       cleanup:
         required: false
         type: boolean
