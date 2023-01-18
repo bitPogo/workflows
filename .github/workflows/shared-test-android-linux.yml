@@ -65,11 +65,11 @@ jobs:
 
     strategy:
       matrix:
-        project: fromJson(inputs.projects)
-        api-level: fromJson(inputs.level)
-        target: fromJson(inputs.target)
-        arch: fromJson(inputs.arch)
-        device: fromJson(inputs.device)
+        project: ${{ fromJson(inputs.projects) }}
+        api-level: ${{ fromJson(inputs.level) }}
+        target: ${{ fromJson(inputs.target) }}
+        arch: ${{ fromJson(inputs.arch) }}
+        device: ${{ fromJson(inputs.device) }}
 
 
     name: Check ${{ matrix.project }} ${{ matrix.api-level }} ${{ matrix.target }} ${{ matrix.arch }} ${{ matrix.device }}
