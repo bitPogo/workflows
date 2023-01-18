@@ -3,11 +3,11 @@ name: Run Checks (Linux)
 on:
   workflow_call:
     inputs:
-      android:
+      coverage:
         required: false
         type: boolean
         default: false
-      verifyAndroid:
+      coverageVerification:
         required: false
         type: boolean
         default: false
@@ -160,11 +160,11 @@ jobs:
           script: ./gradlew connectedCheck
 
       - name: Coverage Android
-        if: inputs.android == true
+        if: inputs.coverage == true
         run: ./gradlew --no-daemon --stacktrace androidCoverage
 
       - name: Verification Android
-        if: inputs.verifyAndroid == true
+        if: inputs.coverageVerification == true
         run: ./gradlew --no-daemon --stacktrace androidCoverageVerification
 
       - name: Publish Test Report
