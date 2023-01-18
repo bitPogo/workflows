@@ -160,7 +160,7 @@ jobs:
           profile: ${{ matrix.device }}
           disable-animations: ${{ inputs.disable-animations }}
           emulator-options: ${{ inputs.emulator-options }}
-          script: ./gradlew ${{ join(fromJson(inputs.projects), ':connectedCheck ') }}
+          script: ./gradlew ${{ join(fromJson(inputs.projects), ':connectedCheck ') }}:connectedCheck
 
       - name: Run Aggregated Instrumented Tests
         if: endsWith(fromJson(inputs.projects)[0], ':') == true
