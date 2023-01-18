@@ -10,7 +10,7 @@ on:
       build-cache-dir:
         required: false
         type: string
-        default: "['**/build-cache/**', 'caches/build-cache/**',  'caches/build-cache', 'caches', 'notifications']"
+        default: '**/.gradle/build-cache/**'
 
 jobs:
   build-linux:
@@ -43,7 +43,7 @@ jobs:
         uses: gradle/gradle-build-action@v2
         with:
           cache-read-only: false
-          gradle-home-cache-includes: ${{ inputs.build-cache-dir }}
+          # gradle-home-cache-includes: ${{ inputs.build-cache-dir }}
 
       - name: Setup gradle (write only)
         if: inputs.cache-write-only == true
@@ -51,7 +51,7 @@ jobs:
         with:
           cache-read-only: false
           cache-write-only: true
-          gradle-home-cache-includes: ${{ inputs.build-cache-dir }}
+          # gradle-home-cache-includes: ${{ inputs.build-cache-dir }}
 
       - name: Cache Konan
         uses: actions/cache@v3
@@ -64,3 +64,23 @@ jobs:
 
       - name: Build # Ensure Build
         run: ./gradlew build -x check --no-daemon --stacktrace
+
+      - name: Cache BuildCache
+        if: inputs.cache-write-only == true
+        uses: actions/cache/save@v3
+        with:
+          path: ${{ inputs.build-cache-dir }}
+          key: ${{ runner.os }}-build-${{ hashFiles('*.gradle.kts') }}
+          restore-keys: |
+            ${{ runner.os }}-build-${{ hashFiles('*.gradle.kts') }}
+            ${{ runner.os }}-build-
+
+      - name: Cache BuildCache
+        if: inputs.cache-write-only == false
+        uses: actions/cache@v3
+        with:
+          path: ${{ inputs.build-cache-dir }}
+          key: ${{ runner.os }}-build-${{ hashFiles('*.gradle.kts') }}
+          restore-keys: |
+            ${{ runner.os }}-build-${{ hashFiles('*.gradle.kts') }}
+            ${{ runner.os }}-build-

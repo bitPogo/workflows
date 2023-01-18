@@ -13,7 +13,7 @@ on:
       build-cache-dir:
         required: false
         type: string
-        default: "['**/build-cache/**', 'caches/build-cache/**',  'caches/build-cache', 'caches', 'notifications']"
+        default: '**/.gradle/build-cache/**'
 
 concurrency:
   group: validation-${{ github.workflow }}@${{ github.event.pull_request.head.label || github.head_ref || github.ref }}
@@ -65,6 +65,18 @@ jobs:
           path: |
             ~/.konan
           key: ${{ runner.os }}-konan-${{ hashFiles('*.gradle.kts') }}
+          restore-keys: |
+            ${{ runner.os }}-konan-${{ hashFiles('*.gradle.kts') }}
+            ${{ runner.os }}-konan-
+
+      - name: Restore BuildCache
+        uses: actions/cache/restore@v3
+        with:
+          path: ${{ inputs.build-cache-dir }}
+          key: ${{ runner.os }}-build-${{ hashFiles('*.gradle.kts') }}
+          restore-keys: |
+            ${{ runner.os }}-build-${{ hashFiles('*.gradle.kts') }}
+            ${{ runner.os }}-build-
 
       - name: Validate Gradle Wrapper
         if: contains(fromJson(inputs.platforms), matrix.config.target)
@@ -74,7 +86,7 @@ jobs:
         if: contains(fromJson(inputs.platforms), matrix.config.target)
         uses: gradle/gradle-build-action@v2
         with:
-          gradle-home-cache-includes: ${{ inputs.build-cache-dir }}
+          # gradle-home-cache-includes: ${{ inputs.build-cache-dir }}
           cache-read-only: true
 
       - name: Cleanup

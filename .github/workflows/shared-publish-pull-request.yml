@@ -14,7 +14,7 @@ on:
       build-cache-dir:
         required: false
         type: string
-        default: "['**/build-cache/**', 'caches/build-cache/**',  'caches/build-cache', 'caches', 'notifications']"  
+        default: '**/.gradle/build-cache/**'  
       
     secrets:
       upload-username:
@@ -60,7 +60,7 @@ jobs:
       - name: Setup gradle
         uses: gradle/gradle-build-action@v2
         with:
-          gradle-home-cache-includes: ${{ inputs.build-cache-dir }}
+          # gradle-home-cache-includes: ${{ inputs.build-cache-dir }}
           cache-read-only: true
 
       - name: Cache Konan
@@ -71,6 +71,15 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-konan-${{ hashFiles('*.gradle.kts') }}
             ${{ runner.os }}-konan-
+
+      - name: Restore BuildCache
+        uses: actions/cache/restore@v3
+        with:
+          path: ${{ inputs.build-cache-dir }}
+          key: ${{ runner.os }}-build-${{ hashFiles('*.gradle.kts') }}
+          restore-keys: |
+            ${{ runner.os }}-build-${{ hashFiles('*.gradle.kts') }}
+            ${{ runner.os }}-build-
 
       - name: Publish to Development Repository
         run: ./gradlew publishDevelopment -x check --no-parallel
@@ -108,7 +117,7 @@ jobs:
       - name: Setup gradle
         uses: gradle/gradle-build-action@v2
         with:
-          gradle-home-cache-includes: ${{ inputs.build-cache-dir }}
+          # gradle-home-cache-includes: ${{ inputs.build-cache-dir }}
           cache-read-only: true
 
       - name: Cache Konan
@@ -158,7 +167,7 @@ jobs:
       - name: Setup gradle
         uses: gradle/gradle-build-action@v2
         with:
-          gradle-home-cache-includes: ${{ inputs.build-cache-dir }}
+          # gradle-home-cache-includes: ${{ inputs.build-cache-dir }}
           cache-read-only: true
 
       - name: Cache Konan

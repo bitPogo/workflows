@@ -34,7 +34,7 @@ on:
       build-cache-dir:
         required: false
         type: string
-        default: "['**/build-cache/**', 'caches/build-cache/**',  'caches/build-cache', 'caches', 'notifications']"
+        default: '**/.gradle/build-cache/**'
         
     secrets:
       github-token:
@@ -76,7 +76,7 @@ jobs:
       - name: Setup gradle
         uses: gradle/gradle-build-action@v2
         with:
-          gradle-home-cache-includes: ${{ inputs.build-cache-dir }}
+          # gradle-home-cache-includes: ${{ inputs.build-cache-dir }}
           cache-read-only: true
 
       - name: Restore Reports
@@ -88,6 +88,15 @@ jobs:
             **/reports/jacoco/**/*.xml
             **/test-results/**/*
           key: reports-${{ github.head_ref }}
+
+      - name: Restore BuildCache
+        uses: actions/cache/restore@v3
+        with:
+          path: ${{ inputs.build-cache-dir }}
+          key: ${{ runner.os }}-build-${{ hashFiles('*.gradle.kts') }}
+          restore-keys: |
+            ${{ runner.os }}-build-${{ hashFiles('*.gradle.kts') }}
+            ${{ runner.os }}-build-
 
       - name: Coverage Jvm
         if: inputs.jvm == true
