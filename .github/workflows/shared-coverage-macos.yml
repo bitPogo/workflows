@@ -79,6 +79,16 @@ jobs:
           gradle-home-cache-includes: ${{ inputs.build-cache-dir }}
           cache-read-only: true
 
+      - name: Restore Reports
+        if: inputs.cache-results == true
+        uses: actions/cache/restrore@v3
+        with:
+          path: |
+            **/reports/detekt/detekt.xml
+            **/reports/jacoco/**/*.xml
+            **/test-results/**/*
+          key: reports-${{ github.head_ref }}
+
       - name: Coverage Jvm
         if: inputs.jvm == true
         run: ./gradlew --no-daemon --stacktrace jvmCoverage
