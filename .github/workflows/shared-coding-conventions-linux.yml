@@ -65,9 +65,9 @@ jobs:
         uses: actions/cache/restore@v3
         with:
           path: ${{ inputs.build-cache-dir }}
-          key: ${{ runner.os }}-build-${{ hashFiles('*.gradle.kts') }}
+          key: ${{ runner.os }}-build-${{ github.head_ref }}
           restore-keys: |
-            ${{ runner.os }}-build-${{ hashFiles('*.gradle.kts') }}
+            ${{ runner.os }}-build-${{ github.head_ref }}
             ${{ runner.os }}-build-
 
       - name: Cache Reports

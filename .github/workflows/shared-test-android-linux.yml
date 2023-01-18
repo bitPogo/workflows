@@ -96,26 +96,22 @@ jobs:
           # gradle-home-cache-includes: ${{ inputs.build-cache-dir }}
           cache-read-only: true
 
-      - name: Cleanup
-        if: inputs.cleanup == true
-        run: ./gradlew clean
-
       - name: Cache Konan
         uses: actions/cache@v3
         with:
           path: ~/.konan
-          key: ${{ runner.os }}-konan-${{ hashFiles('*.gradle.kts') }}
+          key: ${{ runner.os }}-konan-${{ github.head_ref }}
           restore-keys: |
-            ${{ runner.os }}-konan-${{ hashFiles('*.gradle.kts') }}
+            ${{ runner.os }}-konan-${{ github.head_ref }}
             ${{ runner.os }}-konan-
 
       - name: Restore BuildCache
         uses: actions/cache/restore@v3
         with:
           path: ${{ inputs.build-cache-dir }}
-          key: ${{ runner.os }}-build-${{ hashFiles('*.gradle.kts') }}
+          key: ${{ runner.os }}-build-${{ github.head_ref }}
           restore-keys: |
-            ${{ runner.os }}-build-${{ hashFiles('*.gradle.kts') }}
+            ${{ runner.os }}-build-${{ github.head_ref }}
             ${{ runner.os }}-build-
 
       - name: AVD cache
@@ -149,6 +145,10 @@ jobs:
           disable-animations: ${{ inputs.disable-animations }}
           emulator-options: ${{ inputs.emulator-options }}
           script: echo "Enable Cache."
+
+      - name: Cleanup
+        if: inputs.cleanup == true
+        run: ./gradlew clean
 
       - name: Run Instrumented Tests
         if: endsWith(fromJson(inputs.projects)[0], ':') == false
