@@ -3,6 +3,14 @@ name: Run Checks (Linux)
 on:
   workflow_call:
     inputs:
+      android:
+        required: false
+        type: boolean
+        default: false
+      verifyAndroid:
+        required: false
+        type: boolean
+        default: false
       cleanup:
         required: false
         type: boolean
@@ -61,7 +69,7 @@ jobs:
 
 
     name: Check ${{ matrix.project }} ${{ matrix.api-level }} ${{ matrix.target }} ${{ matrix.arch }} ${{ matrix.device }}
-    steps:
+      steps:
       - name: Display runner context
         run: hostname -s
 
@@ -97,7 +105,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-konan-${{ hashFiles('*.gradle.kts') }}
             ${{ runner.os }}-konan-
-        
+
       - name: AVD cache
         uses: actions/cache@v3
         id: avd-cache
@@ -106,6 +114,16 @@ jobs:
             ~/.android/avd/*
             ~/.android/adb*
           key: avd-${{ matrix.api-level }}
+
+      - name: Cache Reports
+        if: inputs.cache-results == true
+        uses: actions/cache/restore@v3
+        with:
+          path: |
+            **/reports/detekt/detekt.xml
+            **/reports/jacoco/**/*.xml
+            **/test-results/**/*
+          key: reports-${{ github.head_ref }}
 
       - name: Ensure active AVD
         if: steps.avd-cache.outputs.cache-hit != 'true'
@@ -140,6 +158,14 @@ jobs:
           disable-animations: ${{ inputs.disable-animations }}
           emulator-options: ${{ inputs.emulator-options }}
           script: ./gradlew connectedCheck
+
+      - name: Coverage Android
+        if: inputs.android == true
+        run: ./gradlew --no-daemon --stacktrace androidCoverage
+
+      - name: Verification Android
+        if: inputs.verifyAndroid == true
+        run: ./gradlew --no-daemon --stacktrace androidCoverageVerification
 
       - name: Publish Test Report
         if: failure()

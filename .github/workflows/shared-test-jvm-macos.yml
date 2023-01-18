@@ -1,0 +1,87 @@
+name: Run Checks
+
+on:
+  workflow_call:
+    inputs:
+      cleanup:
+        required: false
+        type: boolean
+        default: true
+      projects:
+        required: false
+        type: string
+        default: "[':']"
+      build-cache-dir:
+        required: false
+        type: string
+        default: '**/build-cache/**/*'
+
+
+concurrency:
+  group: validation-${{ github.head_ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    strategy:
+      matrix:
+        project: fromJson(inputs.projects)
+
+    runs-on: macos-latest
+
+    env:
+      GITHUB: ${{ github.workspace }}
+
+    name: Check ${{ matrix.project }}
+    steps:
+      - name: Display runner context
+        run: hostname -s
+
+      - name: Checkout Repo
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Setup Java
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin' # See 'Supported distributions' for available options
+          java-version: '11'
+
+      - name: Validate Gradle Wrapper
+        uses: gradle/wrapper-validation-action@v1
+
+      - name: Setup gradle
+        uses: gradle/gradle-build-action@v2
+        with:
+          gradle-home-cache-includes: ${{ inputs.build-cache-dir }}
+          cache-read-only: true
+
+      - name: Cache Konan
+        uses: actions/cache@v3
+        with:
+          path: ~/.konan
+          key: ${{ runner.os }}-konan-${{ hashFiles('*.gradle.kts') }}
+          restore-keys: |
+            ${{ runner.os }}-konan-${{ hashFiles('*.gradle.kts') }}
+            ${{ runner.os }}-konan-
+
+      - name: Cleanup
+        if: inputs.cleanup == true
+        run: ./gradlew clean
+
+      - name: Test
+        if: endsWith(matrix.project, ':') == false
+        continue-on-error: false
+        run: ./gradlew ${{ matrix.project }}:test
+
+      - name: Aggregated Test
+        if: endsWith(matrix.project, ':') == true
+        continue-on-error: false
+        run: ./gradlew test
+
+      - name: Publish Test Report
+        if: failure()
+        uses: mikepenz/action-junit-report@v3
+        with:
+          report_paths: '**/build/test-results/**/TEST-*.xml'

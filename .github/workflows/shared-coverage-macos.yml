@@ -1,0 +1,117 @@
+name: Run Checks
+
+on:
+  workflow_call:
+    inputs:
+      jvm:
+        required: false
+        type: boolean
+        default: false
+      verifyJvm:
+        required: false
+        type: boolean
+        default: false
+      kmp:
+        required: false
+        type: boolean
+        default: false
+      verifyKmp:
+        required: false
+        type: boolean
+        default: false
+      custom:
+        required: false
+        type: string
+        default: ''
+      verifyCustom:
+        required: false
+        type: string
+        default: ''
+      cache-results:
+        required: false
+        type: boolean
+        default: true
+      build-cache-dir:
+        required: false
+        type: string
+        default: '**/build-cache/**/*'
+        
+    secrets:
+      github-token:
+        required: false
+      sonar-token:
+        required: false
+
+concurrency:
+  group: coverage-${{ github.head_ref }}
+  cancel-in-progress: true
+
+jobs:
+  coverage:
+    runs-on: ubuntu-latest
+
+    env:
+      GITHUB: ${{ github.workspace }}
+      useSonar: ${{ secrets.sonar-token != '' }}
+
+    name: Code Coverage
+    steps:
+      - name: Display runner context
+        run: hostname -s
+
+      - name: Checkout Repo
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Setup Java
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin' # See 'Supported distributions' for available options
+          java-version: '11'
+
+      - name: Validate Gradle Wrapper
+        uses: gradle/wrapper-validation-action@v1
+
+      - name: Setup gradle
+        uses: gradle/gradle-build-action@v2
+        with:
+          gradle-home-cache-includes: ${{ inputs.build-cache-dir }}
+          cache-read-only: true
+
+      - name: Coverage Jvm
+        if: inputs.jvm == true
+        run: ./gradlew --no-daemon --stacktrace jvmCoverage
+
+      - name: Verification Jvm
+        if: inputs.verifyJvm == true
+        run: ./gradlew --no-daemon --stacktrace jvmCoverageVerification
+
+      - name: Coverage KMP
+        if: inputs.kmp == true
+        run: ./gradlew --no-daemon --stacktrace multiplatformCoverage
+
+      - name: Verification KMP
+        if: inputs.verifyKmp == true
+        run: ./gradlew --no-daemon --stacktrace multiplatformCoverageVerification
+
+      - name: Coverage Custom
+        if: inputs.custom != ''
+        run: ./gradlew --no-daemon --stacktrace join(fromJSON(inputs.custom), 'Coverage')
+
+      - name: Verification Custom
+        if: inputs.verifyCustom != ''
+        run: ./gradlew --no-daemon --stacktrace join(fromJSON(inputs.verifyCustom), 'CoverageVerification')
+
+      - name: Publish Test Report
+        if: failure()
+        uses: mikepenz/action-junit-report@v3
+        with:
+          report_paths: '**/build/test-results/**/TEST-*.xml'
+
+      - name: Sonarcloud
+        if: env.useSonar == true && success()
+        env:
+          GITHUB_TOKEN: ${{ secrets.github-token }}
+          SONAR_TOKEN: ${{ secrets.sonar-token }}
+        run: ./gradlew --no-daemon --stacktrace sonarqube --info

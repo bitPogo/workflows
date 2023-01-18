@@ -3,14 +3,6 @@ name: Run Checks
 on:
   workflow_call:
     inputs:
-      android:
-        required: false
-        type: boolean
-        default: false
-      verifyAndroid:
-        required: false
-        type: boolean
-        default: false
       jvm:
         required: false
         type: boolean
@@ -86,24 +78,6 @@ jobs:
         with:
           gradle-home-cache-includes: ${{ inputs.build-cache-dir }}
           cache-read-only: true
-
-      - name: Cache Reports
-        if: inputs.cache-results == true
-        uses: actions/cache/restore@v3
-        with:
-          path: |
-            **/reports/detekt/detekt.xml
-            **/reports/jacoco/**/*.xml
-            **/test-results/**/*
-          key: reports-${{ github.head_ref }}
-
-      - name: Coverage Android
-        if: inputs.android == true
-        run: ./gradlew --no-daemon --stacktrace androidCoverage
-
-      - name: Verification Android
-        if: inputs.verifyAndroid == true
-        run: ./gradlew --no-daemon --stacktrace androidCoverageVerification
 
       - name: Coverage Jvm
         if: inputs.jvm == true
