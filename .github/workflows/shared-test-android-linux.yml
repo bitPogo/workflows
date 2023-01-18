@@ -65,14 +65,13 @@ jobs:
 
     strategy:
       matrix:
-        project: ${{ fromJson(inputs.projects) }}
         api-level: ${{ fromJson(inputs.api-level) }}
         target: ${{ fromJson(inputs.target) }}
         arch: ${{ fromJson(inputs.arch) }}
         device: ${{ fromJson(inputs.device) }}
 
 
-    name: Check ${{ matrix.project }} ${{ matrix.api-level }} ${{ matrix.target }} ${{ matrix.arch }} ${{ matrix.device }}
+    name: Check ${{ matrix.api-level }} ${{ matrix.target }} ${{ matrix.arch }} ${{ matrix.device }}
       steps:
       - name: Display runner context
         run: hostname -s
@@ -152,7 +151,7 @@ jobs:
           script: echo "Enable Cache."
 
       - name: Run Instrumented Tests
-        if: endsWith(matrix.project, ':') == false
+        if: endsWith(fromJson(inputs.projects)[0], ':') == false
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: ${{ matrix.api-level }}
@@ -161,10 +160,10 @@ jobs:
           profile: ${{ matrix.device }}
           disable-animations: ${{ inputs.disable-animations }}
           emulator-options: ${{ inputs.emulator-options }}
-          script: ./gradlew ${{ matrix.project }}:connectedCheck
+          script: ./gradlew ${{ join(fromJson(inputs.projects), ':connectedCheck ') }}
 
       - name: Run Aggregated Instrumented Tests
-        if: endsWith(matrix.project, ':') == true
+        if: endsWith(fromJson(inputs.projects)[0], ':') == true
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: ${{ matrix.api-level }}
