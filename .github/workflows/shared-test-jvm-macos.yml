@@ -61,18 +61,18 @@ jobs:
         uses: actions/cache@v3
         with:
           path: ~/.konan
-          key: ${{ runner.os }}-konan-${{ github.head_ref }}
+          key: ${{ runner.os }}-konan-${{ github.sha }}
           restore-keys: |
-            ${{ runner.os }}-konan-${{ github.head_ref }}
+            ${{ runner.os }}-konan-${{ github.sha }}
             ${{ runner.os }}-konan-
 
       - name: Restore BuildCache
         uses: actions/cache/restore@v3
         with:
           path: ${{ inputs.build-cache-dir }}
-          key: ${{ runner.os }}-build-${{ github.head_ref }}
+          key: ${{ runner.os }}-build-${{ github.sha }}
           restore-keys: |
-            ${{ runner.os }}-build-${{ github.head_ref }}
+            ${{ runner.os }}-build-${{ github.sha }}
             ${{ runner.os }}-build-
 
       - name: Cleanup
