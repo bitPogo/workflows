@@ -61,16 +61,6 @@ jobs:
           # gradle-home-cache-includes: ${{ inputs.build-cache-dir }}
           cache-read-only: true
 
-      - name: Cache Reports
-        if: inputs.cache-results == true
-        uses: actions/cache/save@v3
-        with:
-          path: |
-            **/reports/detekt/detekt.xml
-            **/reports/jacoco/**/*.xml
-            **/test-results/**/*
-          key: reports-${{ github.head_ref }}
-
       - name: Restore BuildCache
         uses: actions/cache/restore@v3
         with:
@@ -91,3 +81,13 @@ jobs:
       - name: Api check
         if: inputs.api-check == true
         run: ./gradlew apiCheck
+
+      - name: Cache Reports
+        if: inputs.cache-results == true
+        uses: actions/cache/save@v3
+        with:
+          path: |
+            **/reports/detekt/detekt.xml
+            **/reports/jacoco/**/*.xml
+            **/test-results/**/*
+          key: reports-${{ github.sha }}

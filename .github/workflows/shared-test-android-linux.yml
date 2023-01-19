@@ -131,7 +131,7 @@ jobs:
             **/reports/detekt/detekt.xml
             **/reports/jacoco/**/*.xml
             **/test-results/**/*
-          key: reports-${{ github.head_ref }}
+          key: reports-${{ github.sha }}
 
       - name: Ensure active AVD
         if: steps.avd-cache.outputs.cache-hit != 'true'

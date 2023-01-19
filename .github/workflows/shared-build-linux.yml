@@ -62,8 +62,6 @@ jobs:
             ${{ runner.os }}-konan-${{ github.head_ref }}
             ${{ runner.os }}-konan-
 
-
-
       - name: Cache and Restore BuildCache
         if: inputs.cache-write-only == false
         uses: actions/cache@v3

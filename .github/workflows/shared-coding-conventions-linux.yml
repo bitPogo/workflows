@@ -70,16 +70,6 @@ jobs:
             ${{ runner.os }}-build-${{ github.head_ref }}
             ${{ runner.os }}-build-
 
-      - name: Cache Reports
-        if: inputs.cache-results == true
-        uses: actions/cache/save@v3
-        with:
-          path: |
-            **/reports/detekt/detekt.xml
-            **/reports/jacoco/**/*.xml
-            **/test-results/**/*
-          key: reports-${{ github.head_ref }}
-
       - name: Lint
         if: inputs.spotless == true
         run: ./gradlew spotlessCheck
@@ -91,3 +81,13 @@ jobs:
       - name: Api check
         if: inputs.api-check == true
         run: ./gradlew apiCheck
+
+      - name: Cache Reports
+        if: inputs.cache-results == true
+        uses: actions/cache/save@v3
+        with:
+          path: |
+            **/reports/detekt/detekt.xml
+            **/reports/jacoco/**/*.xml
+            **/test-results/**/*
+          key: reports-${{ github.sha }}
