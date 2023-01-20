@@ -58,6 +58,17 @@ jobs:
           distribution: 'temurin' # See 'Supported distributions' for available options
           java-version: '11'
 
+      - name: Setup gradle
+        if: contains(fromJson(inputs.platforms), matrix.config.target)
+        uses: gradle/gradle-build-action@v2
+        with:
+          # gradle-home-cache-includes: ${{ inputs.build-cache-dir }}
+          cache-read-only: true
+
+      - name: Validate Gradle Wrapper
+        if: contains(fromJson(inputs.platforms), matrix.config.target)
+        uses: gradle/wrapper-validation-action@v1
+
       - name: Restore Konan
         if: contains(fromJson(inputs.platforms), matrix.config.target)
         uses: actions/cache/restore@v3
@@ -78,17 +89,6 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-build-${{ github.sha }}
             ${{ runner.os }}-build-
-
-      - name: Setup gradle
-        if: contains(fromJson(inputs.platforms), matrix.config.target)
-        uses: gradle/gradle-build-action@v2
-        with:
-          # gradle-home-cache-includes: ${{ inputs.build-cache-dir }}
-          cache-read-only: true
-
-      - name: Validate Gradle Wrapper
-        if: contains(fromJson(inputs.platforms), matrix.config.target)
-        uses: gradle/wrapper-validation-action@v1
 
       - name: Cleanup
         if: inputs.cleanup == true && contains(fromJson(inputs.platforms), matrix.config.target)
