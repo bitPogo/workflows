@@ -3,6 +3,10 @@ name: Antibytes CI - Build on Linux
 on:
   workflow_call:
     inputs:
+      build-options:
+        required: false
+        type: string
+        default: ''
       cache-write-only:
         required: false
         type: boolean
@@ -73,7 +77,7 @@ jobs:
             ${{ runner.os }}-build-
 
       - name: Build # Ensure Build
-        run: ./gradlew build -x check --no-daemon --stacktrace
+        run: ./gradlew build ${{ inputs.build-options }} -x check --no-daemon --stacktrace
 
       - name: Cache BuildCache
         if: inputs.cache-write-only == true
