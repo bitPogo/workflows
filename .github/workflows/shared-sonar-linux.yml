@@ -1,0 +1,75 @@
+name: Run Sonar
+
+on:
+  workflow_call:
+    inputs:
+      build-cache-dir:
+        required: false
+        type: string
+        default: '**/.gradle/build-cache/**'
+        
+    secrets:
+      github-token:
+        required: false
+      sonar-token:
+        required: false
+
+concurrency:
+  group: sonar-${{ github.head_ref }}
+  cancel-in-progress: true
+
+jobs:
+  coverage:
+    runs-on: ubuntu-latest
+
+    env:
+      GITHUB: ${{ github.workspace }}
+
+    name: Qualitygate - Sonar
+    steps:
+      - name: Display runner context
+        run: hostname -s
+
+      - name: Checkout Repo
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Setup Java
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin' # See 'Supported distributions' for available options
+          java-version: '11'
+
+      - name: Setup gradle
+        uses: gradle/gradle-build-action@v2
+        with:
+          # gradle-home-cache-includes: ${{ inputs.build-cache-dir }}
+          cache-read-only: true
+
+      - name: Validate Gradle Wrapper
+        uses: gradle/wrapper-validation-action@v1
+
+      - name: Restore Reports Coding Conventions
+        if: inputs.restore-cached-reports == true
+        uses: actions/cache/restore@v3
+        with:
+          path: |
+            **/reports/detekt/**/*.xml
+            **/test-results/**/*
+          key: reports-convention-${{ github.sha }}
+
+      - name: Restore Reports Test and Coverage
+        uses: actions/cache/restore@v3
+        with:
+          path: |
+            **/reports/detekt/**/*.xml
+            **/reports/jacoco/**/*.xml
+            **/test-results/**/*
+          key: reports-coverage-${{ github.sha }}
+
+      - name: Sonarcloud
+        env:
+          GITHUB_TOKEN: ${{ secrets.github-token }}
+          SONAR_TOKEN: ${{ secrets.sonar-token }}
+        run: ./gradlew --no-daemon --stacktrace sonarqube --info
