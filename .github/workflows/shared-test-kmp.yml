@@ -70,6 +70,7 @@ jobs:
             ${{ runner.os }}-konan-
 
       - name: Restore BuildCache
+        if: contains(fromJson(inputs.platforms), matrix.config.target)
         uses: actions/cache/restore@v3
         with:
           path: ${{ inputs.build-cache-dir }}
