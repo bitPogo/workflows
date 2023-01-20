@@ -27,6 +27,10 @@ on:
         required: false
         type: string
         default: ''
+      cache-reports:
+        required: false
+        type: boolean
+        default: false
       restore-cached-reports:
         required: false
         type: boolean
@@ -146,3 +150,13 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.github-token }}
           SONAR_TOKEN: ${{ secrets.sonar-token }}
         run: ./gradlew --no-daemon --stacktrace sonarqube --info
+
+      - name: Cache Reports
+        if: inputs.cache-reports == true
+        uses: actions/cache/save@v3
+        with:
+          path: |
+            **/reports/detekt/**/*.xml
+            **/reports/jacoco/**/*.xml
+            **/test-results/**/*
+          key: reports-coverage-${{ github.sha }}

@@ -63,8 +63,8 @@ jobs:
       - name: Validate Gradle Wrapper
         uses: gradle/wrapper-validation-action@v1
 
-      - name: Cache Konan
-        uses: actions/cache@v3
+      - name: Restore Konan
+        uses: actions/cache/restore@v3
         with:
           path: ~/.konan
           key: ${{ runner.os }}-konan-${{ github.sha }}
@@ -120,8 +120,8 @@ jobs:
       - name: Validate Gradle Wrapper
         uses: gradle/wrapper-validation-action@v1
 
-      - name: Cache Konan
-        uses: actions/cache@v3
+      - name: Restore Konan
+        uses: actions/cache/restore@v3
         with:
           path: ~/.konan
           key: ${{ runner.os }}-konan-${{ github.sha }}
@@ -170,8 +170,8 @@ jobs:
       - name: Validate Gradle Wrapper
         uses: gradle/wrapper-validation-action@v1
 
-      - name: Cache Konan
-        uses: actions/cache@v3
+      - name: Restore Konan
+        uses: actions/cache/restore@v3
         with:
           path: ~/.konan
           key: ${{ runner.os }}-konan-${{ github.sha }}
