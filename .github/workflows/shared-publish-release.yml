@@ -27,7 +27,7 @@ on:
         required: false
       ossr-username:
         required: true
-      ossr-token:
+      ossr-password:
         required: true
 
 jobs:
@@ -42,7 +42,7 @@ jobs:
       MAVEN_PASSPHRASE: ${{ secrets.maven-pass }}
       MAVEN_KEY: ${{ secrets.maven-key }}
       OSSR_USERNAME: ${{ secrets.ossr-username }}
-      OSSR_PASSWORD: ${{ secrets.ossr-token }}
+      OSSR_PASSWORD: ${{ secrets.ossr-password }}
 
     steps:
       - name: Display runner context
@@ -103,7 +103,7 @@ jobs:
       MAVEN_PASSPHRASE: ${{ secrets.maven-pass }}
       MAVEN_KEY: ${{ secrets.maven-key }}
       OSSR_USERNAME: ${{ secrets.ossr-username }}
-      OSSR_PASSWORD: ${{ secrets.ossr-token }}
+      OSSR_PASSWORD: ${{ secrets.ossr-password }}
 
     steps:
       - name: Display runner context
@@ -157,7 +157,7 @@ jobs:
       MAVEN_PASSPHRASE: ${{ secrets.maven-pass }}
       MAVEN_KEY: ${{ secrets.maven-key }}
       OSSR_USERNAME: ${{ secrets.ossr-username }}
-      OSSR_PASSWORD: ${{ secrets.ossr-token }}
+      OSSR_PASSWORD: ${{ secrets.ossr-password }}
 
     steps:
       - name: Display runner context
