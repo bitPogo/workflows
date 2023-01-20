@@ -50,6 +50,25 @@ jobs:
       - name: Validate Gradle Wrapper
         uses: gradle/wrapper-validation-action@v1
 
+      - name: Restore Konan
+        uses: actions/cache/restore@v3
+        with:
+          path: |
+            ~/.konan
+          key: ${{ runner.os }}-konan-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-konan-${{ github.sha }}
+            ${{ runner.os }}-konan-
+
+      - name: Restore BuildCache
+        uses: actions/cache/restore@v3
+        with:
+          path: ${{ inputs.build-cache-dir }}
+          key: ${{ runner.os }}-build-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-build-${{ github.sha }}
+            ${{ runner.os }}-build-
+
       - name: Restore Reports Coding Conventions
         if: inputs.restore-cached-reports == true
         uses: actions/cache/restore@v3
