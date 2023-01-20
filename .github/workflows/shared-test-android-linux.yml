@@ -128,7 +128,7 @@ jobs:
         uses: actions/cache@v3
         with:
           path: |
-            **/reports/detekt/*.xml
+            **/reports/detekt/**/*.xml
             **/reports/jacoco/**/*.xml
             **/test-results/**/*
           key: reports-${{ github.sha }}-android
