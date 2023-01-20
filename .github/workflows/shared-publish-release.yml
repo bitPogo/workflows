@@ -59,14 +59,14 @@ jobs:
           distribution: 'temurin' # See 'Supported distributions' for available options
           java-version: '11'
 
-      - name: Validate Gradle Wrapper
-        uses: gradle/wrapper-validation-action@v1
-
       - name: Setup gradle
         uses: gradle/gradle-build-action@v2
         with:
           # gradle-home-cache-includes: ${{ inputs.build-cache-dir }}
           cache-read-only: true
+
+      - name: Validate Gradle Wrapper
+        uses: gradle/wrapper-validation-action@v1
 
       - name: Cache Konan
         uses: actions/cache@v3
@@ -120,14 +120,14 @@ jobs:
           distribution: 'temurin' # See 'Supported distributions' for available options
           java-version: '11'
 
-      - name: Validate Gradle Wrapper
-        uses: gradle/wrapper-validation-action@v1
-
       - name: Setup gradle
         uses: gradle/gradle-build-action@v2
         with:
           # gradle-home-cache-includes: ${{ inputs.build-cache-dir }}
           cache-read-only: true
+
+      - name: Validate Gradle Wrapper
+        uses: gradle/wrapper-validation-action@v1
 
       - name: Cache Konan
         uses: actions/cache@v3
@@ -174,14 +174,14 @@ jobs:
           distribution: 'temurin' # See 'Supported distributions' for available options
           java-version: '11'
 
-      - name: Validate Gradle Wrapper
-        uses: gradle/wrapper-validation-action@v1
-
       - name: Setup gradle
         uses: gradle/gradle-build-action@v2
         with:
           # gradle-home-cache-includes: ${{ inputs.build-cache-dir }}
           cache-read-only: true
+
+      - name: Validate Gradle Wrapper
+        uses: gradle/wrapper-validation-action@v1
 
       - name: Cache Konan
         uses: actions/cache@v3

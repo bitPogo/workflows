@@ -79,16 +79,16 @@ jobs:
             ${{ runner.os }}-build-${{ github.sha }}
             ${{ runner.os }}-build-
 
-      - name: Validate Gradle Wrapper
-        if: contains(fromJson(inputs.platforms), matrix.config.target)
-        uses: gradle/wrapper-validation-action@v1
-
       - name: Setup gradle
         if: contains(fromJson(inputs.platforms), matrix.config.target)
         uses: gradle/gradle-build-action@v2
         with:
           # gradle-home-cache-includes: ${{ inputs.build-cache-dir }}
           cache-read-only: true
+
+      - name: Validate Gradle Wrapper
+        if: contains(fromJson(inputs.platforms), matrix.config.target)
+        uses: gradle/wrapper-validation-action@v1
 
       - name: Cleanup
         if: inputs.cleanup == true && contains(fromJson(inputs.platforms), matrix.config.target)

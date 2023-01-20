@@ -39,9 +39,6 @@ jobs:
           distribution: 'temurin' # See 'Supported distributions' for available options
           java-version: '11'
 
-      - name: Validate Gradle Wrapper
-        uses: gradle/wrapper-validation-action@v1
-
       - name: Setup gradle
         if: inputs.cache-write-only == false
         uses: gradle/gradle-build-action@v2
@@ -56,6 +53,9 @@ jobs:
           cache-read-only: false
           cache-write-only: true
           # gradle-home-cache-includes: ${{ inputs.build-cache-dir }}
+
+      - name: Validate Gradle Wrapper
+        uses: gradle/wrapper-validation-action@v1
 
       - name: Cache Konan
         uses: actions/cache@v3
