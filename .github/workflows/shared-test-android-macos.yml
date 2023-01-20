@@ -11,7 +11,7 @@ on:
         required: false
         type: boolean
         default: false
-      cache-results:
+      cache-reports:
         required: false
         type: boolean
         default: false
@@ -123,18 +123,6 @@ jobs:
             ~/.android/adb*
           key: avd-${{ matrix.api-level }}
 
-      - name: Cache Reports
-        if: inputs.cache-results == true
-        uses: actions/cache@v3
-        with:
-          path: |
-            **/reports/detekt/**/*.xml
-            **/reports/jacoco/**/*.xml
-            **/test-results/**/*
-          key: reports-${{ github.sha }}-android
-          restore-keys: |
-            reports-${{ github.sha }}
-
       - name: Ensure active AVD
         if: steps.avd-cache.outputs.cache-hit != 'true'
         uses: reactivecircus/android-emulator-runner@v2
@@ -189,3 +177,13 @@ jobs:
         uses: mikepenz/action-junit-report@v3
         with:
           report_paths: '**/build/test-results/**/TEST-*.xml'
+
+      - name: Cache Reports
+        if: inputs.cache-reports == true
+        uses: actions/cache/save@v3
+        with:
+          path: |
+            **/reports/detekt/**/*.xml
+            **/reports/jacoco/**/*.xml
+            **/test-results/**/*
+          key: reports-android-${{ github.sha }}

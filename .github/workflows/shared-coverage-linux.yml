@@ -27,7 +27,7 @@ on:
         required: false
         type: string
         default: ''
-      cache-results:
+      restore-cached-reports:
         required: false
         type: boolean
         default: true
@@ -82,8 +82,8 @@ jobs:
       - name: Validate Gradle Wrapper
         uses: gradle/wrapper-validation-action@v1
 
-      - name: Restore Reports Conventions
-        if: inputs.cache-results == true
+      - name: Restore Reports Coding Conventions
+        if: inputs.restore-cached-reports == true
         uses: actions/cache/restore@v3
         with:
           path: |
@@ -91,15 +91,15 @@ jobs:
             **/test-results/**/*
           key: reports-convention-${{ github.sha }}
 
-      - name: Restore Reports Android
-        if: inputs.cache-results == true
+      - name: Restore Reports Android Test and Coverage
+        if: inputs.restore-cached-reports == true
         uses: actions/cache/restore@v3
         with:
           path: |
             **/reports/detekt/**/*.xml
             **/reports/jacoco/**/*.xml
             **/test-results/**/*
-          key: reports-${{ github.sha }}-android
+          key: reports-android-${{ github.sha }}
 
       - name: Restore BuildCache
         uses: actions/cache/restore@v3

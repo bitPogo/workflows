@@ -15,7 +15,7 @@ on:
         required: false
         type: boolean
         default: true
-      cache-results:
+      cache-reports:
         required: false
         type: boolean
         default: true
@@ -83,7 +83,7 @@ jobs:
         run: ./gradlew --no-daemon apiCheck
 
       - name: Cache Reports
-        if: inputs.cache-results == true
+        if: inputs.cache-reports == true
         uses: actions/cache/save@v3
         with:
           path: |
