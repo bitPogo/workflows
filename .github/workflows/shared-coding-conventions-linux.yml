@@ -88,6 +88,5 @@ jobs:
         with:
           path: |
             **/reports/detekt/**/*.xml
-            **/reports/jacoco/**/*.xml
             **/test-results/**/*
-          key: reports-${{ github.sha }}
+          key: reports-convention-${{ github.sha }}

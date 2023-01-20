@@ -82,7 +82,7 @@ jobs:
           # gradle-home-cache-includes: ${{ inputs.build-cache-dir }}
           cache-read-only: true
 
-      - name: Restore Reports
+      - name: Restore Reports Conventions
         if: inputs.cache-results == true
         uses: actions/cache/restore@v3
         with:
@@ -90,10 +90,16 @@ jobs:
             **/reports/detekt/**/*.xml
             **/reports/jacoco/**/*.xml
             **/test-results/**/*
+          key: reports-convention-${{ github.sha }}
+
+      - name: Restore Reports Android
+        if: inputs.cache-results == true
+        uses: actions/cache/restore@v3
+        with:
+          path: |
+            **/reports/detekt/**/*.xml
+            **/test-results/**/*
           key: reports-${{ github.sha }}-android
-          restore-keys: |
-            reports-${{ github.sha }}-android
-            reports-${{ github.sha }}
 
       - name: Restore BuildCache
         uses: actions/cache/restore@v3
