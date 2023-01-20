@@ -150,7 +150,7 @@ jobs:
 
       - name: Cleanup
         if: inputs.cleanup == true
-        run: ./gradlew clean
+        run: ./gradlew --no-daemon clean
 
       - name: Run Instrumented Tests
         if: endsWith(fromJson(inputs.projects)[0], ':') == false
@@ -162,7 +162,7 @@ jobs:
           profile: ${{ matrix.device }}
           disable-animations: ${{ inputs.disable-animations }}
           emulator-options: ${{ inputs.emulator-options }}
-          script: ./gradlew ${{ join(fromJson(inputs.projects), ':connectedCheck ') }}:connectedCheck
+          script: ./gradlew --no-daemon ${{ join(fromJson(inputs.projects), ':connectedCheck ') }}:connectedCheck
 
       - name: Run Aggregated Instrumented Tests
         if: endsWith(fromJson(inputs.projects)[0], ':') == true
@@ -174,7 +174,7 @@ jobs:
           profile: ${{ matrix.device }}
           disable-animations: ${{ inputs.disable-animations }}
           emulator-options: ${{ inputs.emulator-options }}
-          script: ./gradlew connectedCheck
+          script: ./gradlew --no-daemon connectedCheck
 
       - name: Coverage Android
         if: inputs.coverage == true

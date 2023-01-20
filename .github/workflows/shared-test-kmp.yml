@@ -91,12 +91,12 @@ jobs:
 
       - name: Cleanup
         if: inputs.cleanup == true && contains(fromJson(inputs.platforms), matrix.config.target)
-        run: ./gradlew clean
+        run: ./gradlew --no-daemon clean
 
       - name: Test ${{ matrix.config.target }} targets
         if: contains(fromJson(inputs.platforms), matrix.config.target)
         continue-on-error: ${{ matrix.config.continueOnError }}
-        run: ./gradlew ${{ matrix.config.tasks }}
+        run: ./gradlew --no-daemon ${{ matrix.config.tasks }}
 
       - name: Publish Test Report
         if: failure() && contains(fromJson(inputs.platforms), matrix.config.target)

@@ -72,15 +72,15 @@ jobs:
 
       - name: Lint
         if: inputs.spotless == true
-        run: ./gradlew spotlessCheck
+        run: ./gradlew --no-daemon spotlessCheck
 
       - name: Static Analysis
         if: inputs.detekt == true
-        run: ./gradlew detekt
+        run: ./gradlew --no-daemon detekt
 
       - name: Api check
         if: inputs.api-check == true
-        run: ./gradlew apiCheck
+        run: ./gradlew --no-daemon apiCheck
 
       - name: Cache Reports
         if: inputs.cache-results == true

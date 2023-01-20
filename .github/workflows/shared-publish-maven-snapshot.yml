@@ -87,10 +87,10 @@ jobs:
             ${{ runner.os }}-build-
 
       - name: Publish to Maven Central
-        run: ./gradlew publishMavenCentralSnapshot -x check --stacktrace --no-parallel
+        run: ./gradlew publishMavenCentralSnapshot -x check --stacktrace --no-daemon --no-parallel
 
       - name: Publish to Snapshot Repository
-        run: ./gradlew publishSnapshot -x check --no-parallel
+        run: ./gradlew publishSnapshot -x check --stacktrace --no-daemon --no-parallel
 
 
   snapshot-linux-only:
@@ -140,10 +140,10 @@ jobs:
             ${{ runner.os }}-konan-
 
       - name: Publish to Maven Central
-        run: ./gradlew publishMavenCentralSnapshot -x check --stacktrace --no-parallel
+        run: ./gradlew publishMavenCentralSnapshot -x check --stacktrace --no-daemon --no-parallel
 
       - name: Publish to Snapshot Repository
-        run: ./gradlew publishSnapshot -x check --no-parallel
+        run: ./gradlew publishSnapshot -x check --stacktrace --no-daemon --no-parallel
 
   snapshot-mips:
     if: inputs.uses-mips == true && inputs.use-linux-only == false
@@ -193,7 +193,7 @@ jobs:
             ${{ runner.os }}-konan-
 
       - name: Publish Mips to Maven Central Snapshot Repository
-        run: ./gradlew publishLinuxMipsMavenCentralSnapshot -x check --no-parallel --stacktrace
+        run: ./gradlew publishLinuxMipsMavenCentralSnapshot -x --stacktrace --no-daemon --no-parallel
 
       - name: Publish Mips to Snapshot Repository
-        run: ./gradlew publishLinuxMipsSnapshot -x check --no-parallel --stacktrace
+        run: ./gradlew publishLinuxMipsSnapshot -x check --stacktrace --no-daemon --no-parallel

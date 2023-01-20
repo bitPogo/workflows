@@ -77,17 +77,17 @@ jobs:
 
       - name: Cleanup
         if: inputs.cleanup == true
-        run: ./gradlew clean
+        run: ./gradlew --no-daemon clean
 
       - name: Test
         if: endsWith(matrix.project, ':') == false
         continue-on-error: false
-        run: ./gradlew ${{ matrix.project }}:test
+        run: ./gradlew --no-daemon ${{ matrix.project }}:test
 
       - name: Aggregated Test
         if: endsWith(matrix.project, ':') == true
         continue-on-error: false
-        run: ./gradlew test
+        run: ./gradlew --no-daemon test
 
       - name: Publish Test Report
         if: failure()
