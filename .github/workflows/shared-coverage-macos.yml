@@ -52,7 +52,7 @@ concurrency:
 
 jobs:
   coverage:
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
 
     env:
       GITHUB: ${{ github.workspace }}
@@ -92,6 +92,7 @@ jobs:
             **/test-results/**/*
           key: reports-${{ github.sha }}-android
           restore-keys: |
+            reports-${{ github.sha }}-android
             reports-${{ github.sha }}
 
       - name: Restore BuildCache

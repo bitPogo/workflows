@@ -92,6 +92,7 @@ jobs:
             **/test-results/**/*
           key: reports-${{ github.sha }}-android
           restore-keys: |
+            reports-${{ github.sha }}-android
             reports-${{ github.sha }}
 
       - name: Restore BuildCache
