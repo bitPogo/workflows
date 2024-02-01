@@ -151,9 +151,6 @@ jobs:
 
       - name: Setup gradle
         uses: gradle/gradle-build-action@v2
-        with:
-          # gradle-home-cache-includes: ${{ inputs.build-cache-dir }}
-          cache-read-only: true
 
       - name: Validate Gradle Wrapper
         uses: gradle/wrapper-validation-action@v1
