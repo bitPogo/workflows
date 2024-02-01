@@ -28,27 +28,27 @@ jobs:
         run: hostname -s
 
       - name: Checkout Repo
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
           ref: ${{ github.head_ref }}
 
       - name: Setup Java
-        uses: actions/setup-java@v3
+        uses: actions/setup-java@v4
         with:
           distribution: 'temurin' # See 'Supported distributions' for available options
           java-version: '17'
 
       - name: Setup gradle
         if: inputs.cache-write-only == false
-        uses: gradle/gradle-build-action@v2
+        uses: gradle/actions/setup-gradle@v3
         with:
           cache-read-only: false
           # gradle-home-cache-includes: ${{ inputs.build-cache-dir }}
 
       - name: Setup gradle (write only)
         if: inputs.cache-write-only == true
-        uses: gradle/gradle-build-action@v2
+        uses: gradle/actions/setup-gradle@v3
         with:
           cache-read-only: false
           cache-write-only: true
@@ -81,7 +81,7 @@ jobs:
 
       - name: Cache BuildCache
         if: inputs.cache-write-only == true
-        uses: actions/cache/save@v3
+        uses: actions/cache/save@v4
         with:
           path: ${{ inputs.build-cache-dir }}
           key: ${{ runner.os }}-build-${{ github.sha }}

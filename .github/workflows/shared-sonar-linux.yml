@@ -31,18 +31,18 @@ jobs:
         run: hostname -s
 
       - name: Checkout Repo
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
       - name: Setup Java
-        uses: actions/setup-java@v3
+        uses: actions/setup-java@v4
         with:
           distribution: 'temurin' # See 'Supported distributions' for available options
           java-version: '17'
 
       - name: Setup gradle
-        uses: gradle/gradle-build-action@v2
+        uses: gradle/actions/setup-gradle@v3
         with:
           # gradle-home-cache-includes: ${{ inputs.build-cache-dir }}
           cache-read-only: true
@@ -51,7 +51,7 @@ jobs:
         uses: gradle/wrapper-validation-action@v1
 
       - name: Restore Konan
-        uses: actions/cache/restore@v3
+        uses: actions/cache/restore@v4
         with:
           path: |
             ~/.konan
@@ -61,7 +61,7 @@ jobs:
             ${{ runner.os }}-konan-
 
       - name: Restore BuildCache
-        uses: actions/cache/restore@v3
+        uses: actions/cache/restore@v4
         with:
           path: ${{ inputs.build-cache-dir }}
           key: ${{ runner.os }}-build-${{ github.sha }}
@@ -71,7 +71,7 @@ jobs:
 
       - name: Restore Reports Coding Conventions
         if: inputs.restore-cached-reports == true
-        uses: actions/cache/restore@v3
+        uses: actions/cache/restore@v4
         with:
           path: |
             **/reports/detekt/**/*.xml
@@ -79,7 +79,7 @@ jobs:
           key: reports-convention-${{ github.sha }}
 
       - name: Restore Reports Test and Coverage
-        uses: actions/cache/restore@v3
+        uses: actions/cache/restore@v4
         with:
           path: |
             **/reports/detekt/**/*.xml
