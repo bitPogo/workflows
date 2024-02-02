@@ -35,10 +35,7 @@ jobs:
           java-version: '17'
 
       - name: Setup gradle
-        uses: gradle/actions/setup-gradle@v3
-        with:
-          # gradle-home-cache-includes: ${{ inputs.build-cache-dir }}
-          cache-read-only: true
+        uses: gradle/actions/setup-gradle@v3e
 
       - name: Validate Gradle Wrapper
         uses: gradle/wrapper-validation-action@v1
