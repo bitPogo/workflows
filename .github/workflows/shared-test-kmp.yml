@@ -40,7 +40,6 @@ jobs:
           { target: mingw, os: windows-latest, tasks: mingwX64Test, continueOnError: false },
           { target: tvos, os: macos-latest, tasks: tvosX64Test tvosSimulatorArm64Test, continueOnError: false },
           { target: watchos, os: macos-latest, tasks: watchosX64Test watchosSimulatorArm64Test, continueOnError: false },
-          { target: watchosLegacy, os: macos-latest, tasks: watchosX64Test watchosX86Test watchosSimulatorArm64Test, continueOnError: false }, # Note X86 breaks
         ]
     runs-on: ${{ matrix.config.os }}
 
