@@ -14,6 +14,10 @@ on:
         required: false
         type: string
         default: '**/.gradle/build-cache/**'
+      restore-only:
+        required: false
+        type: boolean
+        default: true
 
 concurrency:
   group: validation-${{ github.workflow }}@${{ github.event.pull_request.head.label || github.head_ref || github.ref }}
@@ -81,11 +85,21 @@ jobs:
             ${{ runner.os }}-konan-
 
       - name: Restore BuildCache
-        if: contains(fromJson(inputs.platforms), matrix.config.target)
+        if: contains(fromJson(inputs.platforms), matrix.config.target) && restore-only == true
         uses: actions/cache/restore@v4
         with:
           path: ${{ inputs.build-cache-dir }}
           key: ${{ runner.os }}-build-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-build-${{ github.sha }}
+            ${{ runner.os }}-build-
+
+      - name: Cache BuildCache
+        if: contains(fromJson(inputs.platforms), matrix.config.target) && restore-only == false
+        uses: actions/cache/restore@v4
+        with:
+          path: ${{ inputs.build-cache-dir }}
+          key: ${{ runner.os }}-build-
           restore-keys: |
             ${{ runner.os }}-build-${{ github.sha }}
             ${{ runner.os }}-build-
