@@ -38,7 +38,7 @@ jobs:
         uses: gradle/actions/setup-gradle@v3e
 
       - name: Validate Gradle Wrapper
-        uses: gradle/wrapper-validation-action@v1
+        uses: gradle/wrapper-validation-action@v2
 
       - name: Prepare Python
         run: python3 -m pip install virtualenv --user

@@ -57,7 +57,7 @@ jobs:
         uses: gradle/actions/setup-gradle@v3
 
       - name: Validate Gradle Wrapper
-        uses: gradle/wrapper-validation-action@v1
+        uses: gradle/wrapper-validation-action@v2
 
       - name: Restore Konan
         uses: actions/cache/restore@v4
@@ -101,7 +101,7 @@ jobs:
         uses: gradle/actions/setup-gradle@v3
 
       - name: Validate Gradle Wrapper
-        uses: gradle/wrapper-validation-action@v1
+        uses: gradle/wrapper-validation-action@v2
 
       - name: Restore Konan
         uses: actions/cache/restore@v4
@@ -147,7 +147,7 @@ jobs:
         uses: gradle/actions/setup-gradle@v3
 
       - name: Validate Gradle Wrapper
-        uses: gradle/wrapper-validation-action@v1
+        uses: gradle/wrapper-validation-action@v2
 
       - name: Restore Konan
         uses: actions/cache/restore@v4
