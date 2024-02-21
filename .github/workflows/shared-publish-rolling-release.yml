@@ -81,7 +81,7 @@ jobs:
             ${{ runner.os }}-build-
 
       - name: Publish to Rolling Release Repository
-        run: ./gradlew publishRollingRelease --stacktrace --no-daemon --no-parallel
+        run: ./gradlew publishRollingRelease --stacktrace --no-daemon --no-parallel --no-configuration-cache
 
   rolling-release-linux-only:
     if: inputs.use-linux-only == true
@@ -128,7 +128,7 @@ jobs:
             ${{ runner.os }}-konan-
 
       - name: Publish to Rolling Release Repository
-        run: ./gradlew publishRollingRelease --stacktrace --no-daemon --no-parallel
+        run: ./gradlew publishRollingRelease --stacktrace --no-daemon --no-parallel --no-configuration-cache
 
 
   rolling-release-mips:
@@ -177,4 +177,4 @@ jobs:
             ${{ runner.os }}-konan-
 
       - name: Publish Mips to Rolling Release Repository
-        run: ./gradlew publishLinuxMipsRollingRelease --stacktrace --no-daemon --no-parallel
+        run: ./gradlew publishLinuxMipsRollingRelease --stacktrace --no-daemon --no-parallel --no-configuration-cache

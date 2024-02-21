@@ -69,7 +69,7 @@ jobs:
             ${{ runner.os }}-konan-
 
       - name: Publish to Snapshot Repository
-        run: ./gradlew publishSnapshot --stacktrace --no-daemon --no-parallel
+        run: ./gradlew publishSnapshot --stacktrace --no-daemon --no-parallel --no-configuration-cache
 
   snapshot-linux-only:
     if: inputs.use-linux-only == true
@@ -113,7 +113,7 @@ jobs:
             ${{ runner.os }}-konan-
 
       - name: Publish to Snapshot Repository
-        run: ./gradlew publishSnapshot --stacktrace --no-daemon --no-parallel
+        run: ./gradlew publishSnapshot --stacktrace --no-daemon --no-parallel --no-configuration-cache
 
 
   snapshot-mips:
@@ -168,4 +168,4 @@ jobs:
             ${{ runner.os }}-build-
 
       - name: Publish Mips to Snapshot Repository
-        run: ./gradlew publishLinuxMipsSnapshot --stacktrace --no-daemon --no-parallel
+        run: ./gradlew publishLinuxMipsSnapshot --stacktrace --no-daemon --no-parallel --no-configuration-cache

@@ -82,7 +82,7 @@ jobs:
             ${{ runner.os }}-build-
 
       - name: Publish to Development Repository
-        run: ./gradlew publishDevelopment --stacktrace --no-daemon --no-parallel
+        run: ./gradlew publishDevelopment --stacktrace --no-daemon --no-parallel --no-configuration-cache
 
   publish-pull-request-linux-only:
     if: inputs.use-linux-only == true
@@ -130,7 +130,7 @@ jobs:
             ${{ runner.os }}-konan-
 
       - name: Publish to Development Repository
-        run: ./gradlew publishDevelopment --stacktrace --no-daemon --no-parallel
+        run: ./gradlew publishDevelopment --stacktrace --no-daemon --no-parallel --no-configuration-cache
 
 
   publish-pull-request-mips:
@@ -180,4 +180,4 @@ jobs:
             ${{ runner.os }}-konan-
 
       - name: Publish Mips to Development Repository
-        run: ./gradlew publishLinuxMipsDevelopment --stacktrace --no-daemon --no-parallel
+        run: ./gradlew publishLinuxMipsDevelopment --stacktrace --no-daemon --no-parallel --no-configuration-cache
