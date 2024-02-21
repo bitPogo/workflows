@@ -35,7 +35,7 @@ jobs:
           java-version: '17'
 
       - name: Setup gradle
-        uses: gradle/actions/setup-gradle@v3e
+        uses: gradle/actions/setup-gradle@v3
 
       - name: Validate Gradle Wrapper
         uses: gradle/wrapper-validation-action@v2
