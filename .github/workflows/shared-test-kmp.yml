@@ -30,11 +30,11 @@ jobs:
         config: [
           { target: android, os: ubuntu-latest, tasks: testDebugUnitTest testReleaseUnitTest, continueOnError: false },
           { target: ios, os: macos-latest, tasks: iosX64Test iosSimulatorArm64Test, continueOnError: false },
-          { target: js, os: ubuntu-latest, tasks: jsTest, continueOnError: false },
+          { target: js, os: ubuntu-latest, tasks: kotlinUpgradeYarnLock jsTest, continueOnError: false },
           { target: jvm, os: ubuntu-latest, tasks: jvmTest, continueOnError: false },
           { target: linux, os: ubuntu-latest, tasks: linuxX64Test, continueOnError: false },
           { target: linux-all, os: ubuntu-latest, tasks: linuxX64Test jsTest jvmTest testDebugUnitTest testReleaseUnitTest, continueOnError: false },
-          { target: linux-js, os: ubuntu-latest, tasks: linuxX64Test jsTest, continueOnError: false },
+          { target: linux-js, os: ubuntu-latest, tasks: kotlinUpgradeYarnLock linuxX64Test jsTest, continueOnError: false },
           { target: apple, os: macos-latest, tasks: iosX64Test iosSimulatorArm64Test macosX64Test macosArm64Test tvosX64Test tvosSimulatorArm64Test  watchosX64Test watchosSimulatorArm64Test, continueOnError: false },
           { target: macos, os: macos-latest, tasks: macosX64Test macosArm64Test, continueOnError: false },
           { target: mingw, os: windows-latest, tasks: mingwX64Test, continueOnError: false },
