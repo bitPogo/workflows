@@ -97,7 +97,7 @@ jobs:
       uses: gradle/wrapper-validation-action@v1
 
     - name: Cache Konan
-      uses: actions/cache@v3
+      uses: actions/cache@v4
       with:
         path: ~/.konan
         key: ${{ runner.os }}-konan-${{ github.sha }}
@@ -115,7 +115,7 @@ jobs:
           ${{ runner.os }}-build-
 
     - name: AVD cache
-      uses: actions/cache@v3
+      uses: actions/cache@v4
       id: avd-cache
       with:
         path: |
