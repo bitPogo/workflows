@@ -7,10 +7,6 @@ on:
         required: false
         type: boolean
         default: false
-      use-mips:
-        required: false
-        type: boolean
-        default: true
       build-cache-dir:
         required: false
         type: string
@@ -143,57 +139,3 @@ jobs:
 
       - name: Publish to Maven Central Repository
         run: ./gradlew publishRelease --stacktrace --no-daemon --no-parallel --no-configuration-cache
-
-
-  release-mips:
-    if: inputs.use-mips == true && inputs.use-linux-only == false
-    runs-on: ubuntu-latest
-    needs: release
-
-    env:
-      GITHUB: ${{ github.workspace }}
-      PACKAGE_REGISTRY_UPLOAD_USERNAME: ${{ secrets.upload-username }}
-      PACKAGE_REGISTRY_UPLOAD_TOKEN: ${{ secrets.upload-token }}
-      MAVEN_PASSPHRASE: ${{ secrets.maven-pass }}
-      MAVEN_KEY: ${{ secrets.maven-key }}
-      OSSR_USERNAME: ${{ secrets.ossr-username }}
-      OSSR_PASSWORD: ${{ secrets.ossr-password }}
-
-    steps:
-      - name: Display runner context
-        run: hostname -s
-
-      - name: Checkout Repo
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
-      - name: Setup Java
-        uses: actions/setup-java@v4
-        with:
-          distribution: 'temurin' # See 'Supported distributions' for available options
-          java-version: '17'
-
-      - name: Setup gradle
-        uses: gradle/actions/setup-gradle@v3
-        with:
-          # gradle-home-cache-includes: ${{ inputs.build-cache-dir }}
-          cache-read-only: true
-
-      - name: Validate Gradle Wrapper
-        uses: gradle/wrapper-validation-action@v2
-
-      - name: Restore Konan
-        uses: actions/cache/restore@v4
-        with:
-          path: ~/.konan
-          key: ${{ runner.os }}-konan-${{ github.sha }}
-          restore-keys: |
-            ${{ runner.os }}-konan-${{ github.sha }}
-            ${{ runner.os }}-konan-
-
-      - name: Publish Mips to Maven Central Repository
-        run: ./gradlew publishLinuxMipsMavenCentral --stacktrace --no-daemon --no-parallel --no-configuration-cache
-
-      - name: Publish Mips to Rolling Release Repository
-        run: ./gradlew publishLinuxMipsRelease --stacktrace --no-daemon --no-parallel --no-configuration-cache
