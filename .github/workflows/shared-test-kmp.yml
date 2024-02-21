@@ -85,7 +85,7 @@ jobs:
             ${{ runner.os }}-konan-
 
       - name: Restore BuildCache
-        if: contains(fromJson(inputs.platforms), matrix.config.target) && restore-only == true
+        if: ${{ contains(fromJson(inputs.platforms), matrix.config.target) && inputs.restore-only == true }}
         uses: actions/cache/restore@v4
         with:
           path: ${{ inputs.build-cache-dir }}
@@ -95,7 +95,7 @@ jobs:
             ${{ runner.os }}-build-
 
       - name: Cache BuildCache
-        if: contains(fromJson(inputs.platforms), matrix.config.target) && restore-only == false
+        if: ${{ contains(fromJson(inputs.platforms), matrix.config.target) && inputs.restore-only == false }}
         uses: actions/cache/restore@v4
         with:
           path: ${{ inputs.build-cache-dir }}
